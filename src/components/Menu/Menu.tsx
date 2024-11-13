@@ -1,6 +1,7 @@
 
 "use client";
 
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { BsGraphUpArrow } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
@@ -31,27 +32,27 @@ export const SideMenu = () => {
                     <ul className="space-y-4">
 
                         <li>
-                            <a href="/dashboard" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
+                            <Link href="/dashbord" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
                             <BsGraphUpArrow size={21} className="inline-block mr-2 text-lime-600" /> Dashboard
-                            </a>
+                            </Link>
                         </li>
 
                         <li>
-                            <a href="/perfil" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
+                            <Link href="/perfil" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
                             <FaUser size={21} className="inline-block mr-2 text-lime-600" />    Perfil
-                            </a>
+                            </Link>
                         </li>
 
                         <li>
-                            <a href="/configuracoes" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
+                            <Link href="/configuracoes" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
                             <IoMdSettings size={24} className="inline-block mr-2 text-lime-600" />    Configurações
-                            </a>
+                            </Link>
                         </li>
 
                         <li>
-                            <a href="/equipe" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
+                            <Link href="/equipe" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
                             <RiTeamFill size={24} className="inline-block mr-2 text-lime-600" />    Equipe
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
