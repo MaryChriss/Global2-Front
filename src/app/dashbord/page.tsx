@@ -100,7 +100,7 @@ export default function Dashboard() {
             {
                 label: 'Gasto Ideal do Chuveiro (kWh)',
                 data: [60],  // valor fixo como gasto ideal do chuveiro
-                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                backgroundColor: 'rgba(300, 60, 270, 0.5)',
             },
         ],
     };
@@ -134,7 +134,8 @@ export default function Dashboard() {
             </div>
 
             <div className="">
-                <h2 className="text-2xl font-bold mb-7 ml-9">Dados de Consumo de Energia</h2>
+                <h2 className="text-2xl font-bold font-crimson mb-7 ml-9">Dados de Consumo de Energia</h2>
+                <p className="mb-7 ml-9 font-itim" >(Coloque o consumo medio por mês!)</p>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex gap-28 justify-center">
                         <div className="mb-4">
