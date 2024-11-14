@@ -5,7 +5,6 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { BsGraphUpArrow } from 'react-icons/bs';
 import { FaHome, FaUser } from 'react-icons/fa';
-import { IoMdSettings } from 'react-icons/io';
 import { IoMenu } from 'react-icons/io5';
 import { RiTeamFill } from 'react-icons/ri';
 
@@ -46,12 +45,6 @@ export const SideMenu = () => {
                         <li>
                             <Link href="/perfil" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
                             <FaUser size={21} className="inline-block mr-2 text-lime-600" />    Perfil
-                            </Link>
-                        </li>
-
-                        <li>
-                            <Link href="/configuracoes" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
-                            <IoMdSettings size={24} className="inline-block mr-2 text-lime-600" />    Configurações
                             </Link>
                         </li>
 

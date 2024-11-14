@@ -1,4 +1,4 @@
-"use client"; // Adicione esta linha no início do arquivo
+"use client";
 
 import Image from "next/image";
 import React, { useState, useEffect } from 'react';
@@ -18,6 +18,7 @@ import { Layout } from '@/components/Layout/Layout';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function Dashboard() {
+    const [relatorios, setRelatorios] = useState([]);
     const [isClient, setIsClient] = useState(false);
     useEffect(() => setIsClient(true), []);
 
@@ -33,36 +34,76 @@ export default function Dashboard() {
 
     const [showGraphs, setShowGraphs] = useState(false);
 
+    useEffect(() => {
+        const savedRelatorios = JSON.parse(localStorage.getItem('relatorios')) || [];
+        setRelatorios(savedRelatorios);
+    }, []);
+
     const handleInputChange = (event) => {
         const { name, value, type, checked } = event.target;
-        const [category, field] = name.includes(".") ? name.split(".") : [name];
-
-        if (field) {
+        
+        if (name.includes(".")) {
+            const [category, field] = name.split(".");
             setFormData((prevData) => ({
                 ...prevData,
                 [category]: {
                     ...prevData[category],
-                    [field]: type === "checkbox" ? checked : parseFloat(value),
+                    [field]: type === "checkbox" ? checked : value,
                 },
             }));
         } else {
             setFormData((prevData) => ({
                 ...prevData,
-                [name]: type === "checkbox" ? checked : parseFloat(value),
+                [name]: type === "checkbox" ? checked : value,
             }));
         }
     };
+    
 
+    
     const handleSubmit = (event) => {
         event.preventDefault();
+    
+        if (!formData.tipoResidencia || !formData.mesReferencia || !formData.quantidadePessoas) {
+            alert("Por favor, preencha todos os campos obrigatórios!");
+            return;
+        }
+    
+        if (eletrodomesticosSelecionados.length === 0) {
+            alert("Por favor, selecione pelo menos um eletrodoméstico!");
+            return;
+        }
+    
+        if (formData.chuveiro.tem && (!formData.chuveiro.potencia || !formData.chuveiro.tempoBanho || !formData.chuveiro.quantidade)) {
+            alert("Preencha todos os campos do chuveiro!");
+            return;
+        }
+    
+        const novoRelatorio = {
+            mesReferencia: formData.mesReferencia,
+            tipoResidencia: formData.tipoResidencia,
+            quantidadePessoas: formData.quantidadePessoas,
+            consumoReal: eletrodomesticosSelecionados.map(
+                (item) => formData[item.key].consumo * formData[item.key].quantidade
+            ),
+            gastoIdeal: eletrodomesticosSelecionados.map((item) => item.gastoIdeal),
+            chuveiroConsumo: formData.chuveiro.potencia * formData.chuveiro.quantidade * formData.chuveiro.tempoBanho / 60,
+        };
+    
+        const updatedRelatorios = [...relatorios, novoRelatorio];
+        setRelatorios(updatedRelatorios);
+        localStorage.setItem('relatorios', JSON.stringify(updatedRelatorios));
+    
         setShowGraphs(true);
     };
+    
+    
 
     const eletrodomesticos = [
-        { nome: 'Geladeira', key: 'geladeira', gastoIdeal: 30 },
-        { nome: 'Ar-condicionado', key: 'arCondicionado', gastoIdeal: 80 },
+        { nome: 'Geladeira', key: 'geladeira', gastoIdeal: 50 },
+        { nome: 'Ar-condicionado', key: 'arCondicionado', gastoIdeal: 90 },
         { nome: 'Máquina de Lavar', key: 'maquinaLavar', gastoIdeal: 20 },
-        { nome: 'Forno/Cooktop', key: 'fornoCooktop', gastoIdeal: 40 },
+        { nome: 'Forno/Cooktop', key: 'fornoCooktop', gastoIdeal: 120 },
     ];
 
     const eletrodomesticosSelecionados = eletrodomesticos.filter((item) => formData[item.key].tem);
@@ -99,7 +140,7 @@ export default function Dashboard() {
             },
             {
                 label: 'Gasto Ideal do Chuveiro (kWh)',
-                data: [60],  // valor fixo como gasto ideal do chuveiro
+                data: [165],
                 backgroundColor: 'rgba(300, 60, 270, 0.5)',
             },
         ],
@@ -151,6 +192,24 @@ export default function Dashboard() {
                                 <option value="apartamento">Apartamento</option>
                             </select>
                         </div>
+
+                        <div className="flex justify-center gap-28 mb-5">
+                        <div className="mb-4">
+                            <label className="block mb-2 font-medium">Mês de Referência:</label>
+                            <select
+                                name="mesReferencia"
+                                value={formData.mesReferencia || ''}
+                                onChange={handleInputChange}
+                                className="py-2 px-4 w-80 bg-[#c3d4a4] rounded-full focus:outline-none"
+                            >
+                                <option value="">Selecione</option>
+                                {["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"].map((mes, index) => (
+                                    <option key={index} value={mes}>{mes}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
 
                         <CustomInput
                             label="Quantidade de Pessoas:"
@@ -310,6 +369,75 @@ export default function Dashboard() {
                         <Bar data={chuveiroData} options={options} />
                     </div>
                 )}
+
+                    {showGraphs && (
+                        <div className="mt-12 mb-36">
+                            <h3 className="text-xl font-semibold mb-6 ml-9">Relatório de Consumo</h3>
+                            <p className="ml-9">Mês de Referência: {formData.mesReferencia || "Não especificado"}</p>
+                            <div className="bg-lime-50 p-6 rounded-lg w-10/12 mx-auto mt-6">
+                                {eletrodomesticosSelecionados.length > 0 ? (
+                                    eletrodomesticosSelecionados.map((item, index) => {
+                                        const consumoReal = formData[item.key].consumo * formData[item.key].quantidade;
+                                        const consumoIdeal = item.gastoIdeal;
+                                        const status = consumoReal <= consumoIdeal ? 'Dentro do Ideal' : 'Acima do Ideal';
+                                        const color = consumoReal <= consumoIdeal ? 'text-green-700' : 'text-red-700';
+
+                                        return (
+                                            <div key={index} className="flex justify-between py-2 border-b">
+                                                <span className="font-semibold">{item.nome}</span>
+                                                <span>Consumo Real: {consumoReal.toFixed(2)} kWh</span>
+                                                <span>Consumo Ideal: {consumoIdeal.toFixed(2)} kWh</span>
+                                                <span className={`font-semibold ${color}`}>{status}</span>
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <p className="text-center">Nenhum eletrodoméstico selecionado.</p>
+                                )}
+                                {formData.chuveiro.tem && (
+                                    <div className="flex justify-between py-2 mt-4 border-t">
+                                        <span className="font-semibold">Chuveiro</span>
+                                        <span>
+                                            Consumo Real: {(formData.chuveiro.potencia * formData.chuveiro.quantidade * formData.chuveiro.tempoBanho / 60).toFixed(2)} kWh
+                                        </span>
+                                        <span>Consumo Ideal: 60 kWh</span>
+                                        <span className={`${(formData.chuveiro.potencia * formData.chuveiro.quantidade * formData.chuveiro.tempoBanho / 60) <= 60 ? 'text-green-700' : 'text-red-700'} font-semibold`}>
+                                            {(formData.chuveiro.potencia * formData.chuveiro.quantidade * formData.chuveiro.tempoBanho / 60) <= 60 ? 'Dentro do Ideal' : 'Acima do Ideal'}
+                                        </span>
+                                    </div>
+                                )}
+
+                    {relatorios.length > 0 && (
+                        <div className="mt-10">
+                            <h2 className="text-2xl font-bold">Relatórios Salvos:</h2>
+                            {relatorios.map((relatorio, index) => (
+                                <div key={index} className="mb-8 p-4 border border-gray-300 rounded-lg">
+                                    <h3 className="text-xl font-semibold">
+                                        Mês de Referência: {relatorio.mesReferencia}
+                                    </h3>
+                                    <p>Tipo de Residência: {relatorio.tipoResidencia}</p>
+                                    <p>Quantidade de Pessoas: {relatorio.quantidadePessoas}</p>
+
+                                    <h4 className="mt-4 text-lg font-semibold">Consumo de Eletrodomésticos:</h4>
+                                    {eletrodomesticosSelecionados.map((item, idx) => (
+                                        <div key={idx}>
+                                            <p>
+                                                {item.nome}: Consumo Real - {relatorio.consumoReal[idx]} kWh, Gasto Ideal - {relatorio.gastoIdeal[idx]} kWh
+                                            </p>
+                                        </div>
+                                    ))}
+
+                <h4 className="mt-4 text-lg font-semibold">Consumo do Chuveiro:</h4>
+                <p>
+                    Consumo Calculado: {relatorio.chuveiroConsumo.toFixed(2)} kWh
+                </p>
+            </div>
+        ))}
+    </div>
+)}
+        </div>
+    </div>
+)}
             </div>
         </Layout>
     );
