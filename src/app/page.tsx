@@ -27,7 +27,51 @@ export default function Home() {
           <h3 className="mt-9 font-raleway text-base font-bold ml-20 pb-10">Como Funciona o Monitoramento:</h3>
         </div>
 
-        
+        <div className="flex flex-row justify-center gap-20 pb-20">
+
+          <div className="flex flex-row gap-20">
+
+            <div className=" flex flex-col justify-center text-center">
+              <BsGraphUpArrow size={40} className=" text-black " />
+              <p className="font-raleway mt-5">Monitore o consumo <br/>
+              de energia em tempo real</p>
+            </div>
+
+            <div className=" flex flex-col justify-center text-center">
+              <FaLightbulb size={40} className=" text-black " />
+              <p className="font-raleway mt-5">Receba dicas <br/>
+              personalizadas para <br/>
+              economizar</p>
+            </div>
+
+          </div>
+
+          <div className="flex flex-row gap-20">
+
+            <div className=" flex flex-col justify-center text-center">
+              <FaRecycle size={40} className=" text-black" />
+              <p className="font-raleway mt-5">Promova práticas <br/>
+              sustentáveis no seu dia a dia </p>
+            </div>
+
+            <div className=" flex flex-col justify-center text-center">
+            <FaHandshake size={40} className=" text-black " />
+            <p className="font-raleway mt-5">Transforme sua vida com <br/>
+            eficiência energética</p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className="flex flex-col justify-center text-center pb-10">
+          <p>Acesse o DashBord para iniciar:</p>
+            <div className=" flex justify-center">
+              <Link href="/dashbord" className=" w-40 mt-5 bg-lime-800 text-white px-6 py-2 rounded-full">Acesse aqui!</Link>
+            </div>
+        </div>
+
+      </div>
     </Layout>
   )
 }
