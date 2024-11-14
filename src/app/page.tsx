@@ -27,9 +27,9 @@ export default function Home() {
           <h3 className="mt-9 font-raleway text-base font-bold ml-20 pb-10">Como Funciona o Monitoramento:</h3>
         </div>
 
-        <div className="flex flex-row justify-center gap-20 pb-20">
+        <div className="flex flex-row justify-center gap-20 pb-20 xs:flex-col xxs:flex-col">
 
-          <div className="flex flex-row gap-20 md:flex-col sm:flex-col">
+          <div className="flex flex-row gap-20 md:flex-col sm:flex-col xs:flex-col xxs:flex-col">
 
             <div className=" flex flex-col justify-center text-center">
               <BsGraphUpArrow size={40} className=" text-black " />
@@ -46,7 +46,7 @@ export default function Home() {
 
           </div>
 
-          <div className="flex flex-row gap-20 md:flex-col sm:flex-col">
+          <div className="flex flex-row gap-20 md:flex-col sm:flex-col xs:flex-col xxs:flex-col">
 
             <div className=" flex flex-col justify-center text-center">
               <FaRecycle size={40} className=" text-black" />
