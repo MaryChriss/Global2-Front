@@ -29,7 +29,7 @@ export default function Home() {
 
         <div className="flex flex-row justify-center gap-20 pb-20">
 
-          <div className="flex flex-row gap-20">
+          <div className="flex flex-row gap-20 md:flex-col sm:flex-col">
 
             <div className=" flex flex-col justify-center text-center">
               <BsGraphUpArrow size={40} className=" text-black " />
@@ -46,7 +46,7 @@ export default function Home() {
 
           </div>
 
-          <div className="flex flex-row gap-20">
+          <div className="flex flex-row gap-20 md:flex-col sm:flex-col">
 
             <div className=" flex flex-col justify-center text-center">
               <FaRecycle size={40} className=" text-black" />
