@@ -12,7 +12,7 @@ export default function CustomInput({
 }) {
     return (
         <div className="mb-4">
-            {label && <label className="block mb-1 font-medium">{label}</label>}
+            {label && <label className="block mb-1 font-medium ">{label}</label>}
             <input
                 type={type}
                 name={name}
@@ -20,7 +20,7 @@ export default function CustomInput({
                 onChange={onChange}
                 min={type === "number" ? min : undefined}
                 placeholder={placeholder}
-                className={`w-full py-2 px-4 bg-[#c3d4a4] rounded-full focus:outline-none ${className}`}
+                className={`w-80 py-2 px-4 bg-[#c3d4a4] rounded-full focus:outline-none ${className}`}
             />
         </div>
     );
