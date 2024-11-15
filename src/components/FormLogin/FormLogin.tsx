@@ -55,7 +55,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ toggleForm }) => {
             alert("Erro ao autenticar. Por favor, tente novamente mais tarde.");
         }
     };
-
+    // sm: md: lg: xl: 2xl:
     return (
         <>
             <div className="flex flex-col justify-center items-center">
@@ -65,7 +65,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ toggleForm }) => {
                         <span className="absolute top-1/2 left-3 transform -translate-y-5 text-2xl text-blue-500">
                             <BiUser size="1.5rem" color="#64be64" />
                         </span>
-                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60"
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60 sm:w-80 md:w-80 lg:w-80 xl:w-80 2xl:w-80"
                             type="text"
                             placeholder="E-mail"
                             {...register("email")}
@@ -78,7 +78,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ toggleForm }) => {
                             <FaLock size="1.5rem" color="#64be64" />
                         </span>
                         <input
-                            className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60"
+                            className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60 sm:w-80 md:w-80 lg:w-80 xl:w-80 2xl:w-80"
                             type="password"
                             placeholder="Senha"
                             {...register("password")}
