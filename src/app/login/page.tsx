@@ -11,7 +11,7 @@ export default function Login() {
     
     return(
         <>
-            <div className="bg-login-fundo bg-cover bg-center h-screen pt-32 pr-32 pl-32 ">
+            <div className="bg-login-fundo bg-cover bg-center h-screen p-32 min-[320px]:p-9 ">
                 <div className="bg-white bg-opacity-70 flex flex-col rounded-3xl">
 
                     <div className="flex flex-col text-center p-11">

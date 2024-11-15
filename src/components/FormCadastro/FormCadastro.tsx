@@ -112,10 +112,10 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
                 <h1 className="mb-10 font-raleway font-bold text-xl">Cadastre-se:</h1>
                 {step === 1 ? (
                     <form className="flex flex-col" onSubmit={handleSubmitCliente(onSubmitCliente)}>
-                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none" type="text" placeholder="Nome Completo" {...registerCliente("nome_cliente")} />
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60" type="text" placeholder="Nome Completo" {...registerCliente("nome_cliente")} />
                         {errorsCliente.nome_cliente && <p>{errorsCliente.nome_cliente.message}</p>}
 
-                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none" type="email" placeholder="Email" {...registerCliente("email")} />
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60" type="email" placeholder="Email" {...registerCliente("email")} />
                         {errorsCliente.email && <p>{errorsCliente.email.message}</p>}
 
                         <div  className="flex justify-center mt-5">
@@ -125,10 +125,10 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
                 ) : (
                     <form onSubmit={handleSubmitLogin(onSubmitLogin)}>
 
-                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none" type="password" placeholder="Senha" {...registerLogin("password")} />
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60" type="password" placeholder="Senha" {...registerLogin("password")} />
                         {errorsLogin.password && <p>{errorsLogin.password.message}</p>}
 
-                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none" type="password" placeholder="Confirme sua senha" {...registerLogin("confirmPassword")} />
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60" type="password" placeholder="Confirme sua senha" {...registerLogin("confirmPassword")} />
                         {errorsLogin.confirmPassword && <p>{errorsLogin.confirmPassword.message}</p>}
 
                         <div  className="flex justify-center mt-5">

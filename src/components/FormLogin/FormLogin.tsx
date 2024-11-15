@@ -65,7 +65,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ toggleForm }) => {
                         <span className="absolute top-1/2 left-3 transform -translate-y-5 text-2xl text-blue-500">
                             <BiUser size="1.5rem" color="#64be64" />
                         </span>
-                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none"
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60"
                             type="text"
                             placeholder="E-mail"
                             {...register("email")}
@@ -78,7 +78,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ toggleForm }) => {
                             <FaLock size="1.5rem" color="#64be64" />
                         </span>
                         <input
-                            className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none"
+                            className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60"
                             type="password"
                             placeholder="Senha"
                             {...register("password")}
