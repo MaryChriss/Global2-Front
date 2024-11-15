@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { FaArrowLeft } from "react-icons/fa";
-
 interface ClienteFormData {
     nome_cliente: string;
     email: string;
@@ -110,38 +108,36 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
 
     return (
         <>
-            <FaArrowLeft size={25} onClick={toggleForm} />
-            <h1>Cadastre-se:</h1>
-            {step === 1 ? (
-                <form onSubmit={handleSubmitCliente(onSubmitCliente)}>
-                    <input type="text" placeholder="Nome Completo" {...registerCliente("nome_cliente")} />
-                    {errorsCliente.nome_cliente && <p>{errorsCliente.nome_cliente.message}</p>}
+            <div className="flex flex-col justify-center items-center">
+                <h1 className="mb-10 font-raleway font-bold text-xl">Cadastre-se:</h1>
+                {step === 1 ? (
+                    <form className="flex flex-col" onSubmit={handleSubmitCliente(onSubmitCliente)}>
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none" type="text" placeholder="Nome Completo" {...registerCliente("nome_cliente")} />
+                        {errorsCliente.nome_cliente && <p>{errorsCliente.nome_cliente.message}</p>}
 
-                    <input type="email" placeholder="Email" {...registerCliente("email")} />
-                    {errorsCliente.email && <p>{errorsCliente.email.message}</p>}
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none" type="email" placeholder="Email" {...registerCliente("email")} />
+                        {errorsCliente.email && <p>{errorsCliente.email.message}</p>}
 
-                    <input type="text" placeholder="Endereço" {...registerCliente("endereco")} />
-                    {errorsCliente.endereco && <p>{errorsCliente.endereco.message}</p>}
+                        <div  className="flex justify-center mt-5">
+                            <button  className="w-1/2 p-1 bg-lime-700 text-white border-none rounded-lg cursor-pointer mb-12" type="submit">Próximo</button>
+                        </div>
+                    </form>
+                ) : (
+                    <form onSubmit={handleSubmitLogin(onSubmitLogin)}>
 
-                    <input type="text" placeholder="Telefone" {...registerCliente("telefone")} />
-                    {errorsCliente.telefone && <p>{errorsCliente.telefone.message}</p>}
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none" type="password" placeholder="Senha" {...registerLogin("password")} />
+                        {errorsLogin.password && <p>{errorsLogin.password.message}</p>}
 
-                    <button type="submit">Próximo</button>
-                </form>
-            ) : (
-                <form onSubmit={handleSubmitLogin(onSubmitLogin)}>
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none" type="password" placeholder="Confirme sua senha" {...registerLogin("confirmPassword")} />
+                        {errorsLogin.confirmPassword && <p>{errorsLogin.confirmPassword.message}</p>}
 
-                    
-                    <input type="password" placeholder="Senha" {...registerLogin("password")} />
-                    {errorsLogin.password && <p>{errorsLogin.password.message}</p>}
-
-                    <input type="password" placeholder="Confirme sua senha" {...registerLogin("confirmPassword")} />
-                    {errorsLogin.confirmPassword && <p>{errorsLogin.confirmPassword.message}</p>}
-
-                    <button type="submit">Cadastrar Login</button>
-                </form>
-            )}
-            <a onClick={toggleForm}>Já tem uma conta? Login</a>
+                        <div  className="flex justify-center mt-5">
+                        <button type="submit">Cadastrar!</button>
+                        </div>
+                    </form>
+                )}
+                <a className="flex justify-center text-center mt-4 cursor-pointer text-lime-950 font-itim underline mb-7" onClick={toggleForm}>Já tem uma conta? Login</a>
+            </div>
         </>
     );
 };
