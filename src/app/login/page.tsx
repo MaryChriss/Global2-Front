@@ -3,7 +3,6 @@
 import { Footer } from "@/components/Footer/footer";
 import { SwitchPanel } from "@/components/SwitchPanel/SwitchPanel";
 import { useRouter } from "next/navigation";
-import router from "next/router";
 import { FaCircleArrowLeft } from "react-icons/fa6";
 
 export default function Login() {
