@@ -1,8 +1,9 @@
 "use client";
 
 import { Footer } from "@/components/Footer/footer";
-import { Layout } from "@/components/Layout/Layout";
-import { useRouter } from "next/navigation";
+import { SwitchPanel } from "@/components/SwitchPanel/SwitchPanel";
+import router from "next/router";
+import { FaCircleArrowLeft } from "react-icons/fa6";
 
 export default function Login() {
     return(
@@ -11,9 +12,14 @@ export default function Login() {
                 <div className="bg-white bg-opacity-70 flex flex-col rounded-3xl">
 
                     <div className="flex flex-col text-center p-11">
-                    <h1 className="font-raleway text-3xl mb-6">Bem-vindo ao Eco-home! <br/></h1>
-                    <p className="font-crimson text-xl"> Faça login para transformar sua relação com a energia, <br/>
-                    ajudando a natureza enquanto economiza </p>
+                        <FaCircleArrowLeft className="cursor-pointer" size={25} onClick={() => router.push('/')} />
+                        <h1 className="font-raleway text-3xl mb-6">Bem-vindo ao Eco-home! <br/></h1>
+                        <p className="font-crimson text-xl"> Faça login para transformar sua relação com a energia, <br/>
+                        ajudando a natureza enquanto economiza </p>
+                    </div>
+
+                    <div>
+                        <SwitchPanel/>
                     </div>
                 </div>
             </div>
