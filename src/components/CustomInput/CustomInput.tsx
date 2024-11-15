@@ -20,7 +20,7 @@ export default function CustomInput({
                 onChange={onChange}
                 min={type === "number" ? min : undefined}
                 placeholder={placeholder}
-                className={`w-80 py-2 px-4 bg-[#c3d4a4] rounded-full focus:outline-none ${className}`}
+                className={`w-80 py-2 px-4 bg-[#c3d4a4] rounded-full focus:outline-none ${className} md:w-25 min-[320px]:w-56`}
             />
         </div>
     );

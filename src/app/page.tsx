@@ -8,6 +8,7 @@ import { FaHandshake, FaLightbulb, FaRecycle } from "react-icons/fa";
 
 export default function Home() {
   return (
+    
     <Layout>
       <Image className=" w-full h-56" src="/naturezaa.jpg" alt="paisagem em um monte com muitas arvores" width={1000} height={1000}/>
       <div className="flex flex-col justify-center text-center bg-white">
@@ -23,21 +24,21 @@ export default function Home() {
           <p className="mt-2 text-center text-lg font-crimson">Monitore seu consumo de energia e obtenha sugestões de economia</p>
         </div>
 
-        <div>
-          <h3 className="mt-9 font-raleway text-base font-bold ml-20 pb-10">Como Funciona o Monitoramento:</h3>
+        <div className="flex justify-center items-center">
+          <h3 className="mt-9 font-raleway text-base font-bold pb-10 ">Como Funciona o Monitoramento:</h3>
         </div>
 
-        <div className="flex flex-row justify-center gap-20 pb-20 xs:flex-col xxs:flex-col">
+        <div className="flex flex-row justify-center gap-20 pb-20 xl:flex-row 2xl:flex-row md:flex-col sm:flex-col min-[320px]:flex-col ">
 
-          <div className="flex flex-row gap-20 md:flex-col sm:flex-col xs:flex-col xxs:flex-col">
+          <div className="flex  gap-20 xl:flex-row 2xl:flex-row lg:flex-row justify-center md:flex-col sm:flex-col min-[320px]:flex-col">
 
-            <div className=" flex flex-col justify-center text-center">
+            <div className=" flex flex-col justify-center items-center text-center">
               <BsGraphUpArrow size={40} className=" text-black " />
               <p className="font-raleway mt-5">Monitore o consumo <br/>
               de energia em tempo real</p>
             </div>
 
-            <div className=" flex flex-col justify-center text-center">
+            <div className=" flex flex-col justify-center text-center items-center">
               <FaLightbulb size={40} className=" text-black " />
               <p className="font-raleway mt-5">Receba dicas <br/>
               personalizadas para <br/>
@@ -46,15 +47,15 @@ export default function Home() {
 
           </div>
 
-          <div className="flex flex-row gap-20 md:flex-col sm:flex-col xs:flex-col xxs:flex-col">
+          <div className="flex flex-row gap-20 xl:flex-row 2x1:flex-row lg:flex-row justify-center md:flex-col sm:flex-col xs:flex-col min-[320px]:flex-col">
 
-            <div className=" flex flex-col justify-center text-center">
+            <div className=" flex flex-col justify-center text-center items-center">
               <FaRecycle size={40} className=" text-black" />
               <p className="font-raleway mt-5">Promova práticas <br/>
               sustentáveis no seu dia a dia </p>
             </div>
 
-            <div className=" flex flex-col justify-center text-center">
+            <div className=" flex flex-col justify-center text-center items-center">
             <FaHandshake size={40} className=" text-black " />
             <p className="font-raleway mt-5">Transforme sua vida com <br/>
             eficiência energética</p>
