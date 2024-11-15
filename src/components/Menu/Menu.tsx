@@ -1,7 +1,9 @@
 "use client";
 
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { BiLogOut } from 'react-icons/bi';
 import { BsGraphUpArrow } from 'react-icons/bs';
 import { FaHome, FaUser, FaUserEdit } from 'react-icons/fa';
 import { IoMenu } from 'react-icons/io5';
@@ -9,6 +11,21 @@ import { RiTeamFill } from 'react-icons/ri';
 
 export const SideMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const loginData = localStorage.getItem("loginData");
+            setIsLoggedIn(!!loginData);
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("loginData");
+        setIsLoggedIn(false);
+        router.push("/");
+    };
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -53,9 +70,17 @@ export const SideMenu = () => {
                     </ul>
 
                     <div className="mt-auto">
-                        <Link href="/login" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
-                            <FaUserEdit size={22} className="inline-block mr-2 text-lime-600" /> Login
-                        </Link>
+                        {isLoggedIn ? (
+                            <>
+                                <BiLogOut size="1.5rem" color="#00a1fc" onClick={handleLogout} style={{ cursor: "pointer" }} />
+                                <span onClick={handleLogout} style={{ cursor: "pointer", color: "#00a1fc" }}>Logout</span>
+                            </>
+                        ) : (
+                            <>
+                                <FaUserEdit size={22} className="inline-block mr-2 text-lime-600" />
+                                <Link className='text-black font-itim' href="/login">Login</Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
