@@ -166,7 +166,13 @@ export default function Dashboard() {
     // sm: md: lg: xl: 2xl:
     return (
         <Layout>
-            <div className="flex items-center justify-center mb-8 min-[320px]:flex-col">
+            <div className="flex items-center justify-center mb-8 
+            sm:flex-col
+            md:flex-col
+            lg:flex-row
+            xl:flex-row
+            2xl:flex-row
+            min-[320px]:flex-col">
                 <h1 className="font-raleway text-xl text-left mr-40 
                 sm:mr-3 ml-5 mt-5
                 md:mr-6
