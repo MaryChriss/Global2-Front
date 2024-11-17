@@ -46,7 +46,7 @@ export default function Perfil() {
         // sm: md: lg: xl: 2xl:
     return (
         <Layout>
-            <div className="bg-lime-50 bg-center h-screen 
+            <div className="bg-lime-50 bg-center 
                 sm:h-1/4
                 md:h-2/4
                 lg:h-screen

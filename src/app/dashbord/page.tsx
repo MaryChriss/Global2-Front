@@ -263,13 +263,13 @@ export default function Dashboard() {
                                 </div>
                         </div>
 
-                        <div className="bg-lime-50 rounded-3xl flex-col w-9/12 justify-center ml-56 text-center
+                        <div className="bg-lime-50 shadow-lg rounded-3xl flex-col w-9/12 justify-center ml-56 text-center
                             sm:ml-20
                             md:ml-28
                             lg:ml-36
                             xl:ml-40
                             2xl:ml-56
-                            min-[320px]:ml-0 min-[320px]:ml-10
+                            min-[320px]:ml-10
                         ">
                         <div className="flex justify-center
                             sm:flex-col sm:text-center sm:gap-2
