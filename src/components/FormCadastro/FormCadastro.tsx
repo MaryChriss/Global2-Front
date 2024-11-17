@@ -5,8 +5,6 @@ import * as Yup from "yup";
 interface ClienteFormData {
     nome_cliente: string;
     email: string;
-    endereco: string;
-    telefone: string;
 }
 
 interface LoginFormData {
@@ -21,8 +19,6 @@ interface FormCadastroProps {
 const schemaCliente = Yup.object().shape({
     nome_cliente: Yup.string().required("Nome é obrigatório"),
     email: Yup.string().email("Email inválido").required("Email é obrigatório"),
-    endereco: Yup.string().required("Endereço é obrigatório"),
-    telefone: Yup.string().required("Telefone é obrigatório"),
 });
 
 const schemaLogin = Yup.object().shape({
@@ -52,7 +48,7 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
     } = useForm<LoginFormData>({ resolver: yupResolver(schemaLogin), defaultValues: {password: "", confirmPassword: ""} });
 
     const onSubmitCliente: SubmitHandler<ClienteFormData> = async (login) => {
-        const { nome_cliente, email, endereco, telefone } = login;
+        const { nome_cliente, email,} = login;
         setEmail(email); 
     
         try {
@@ -62,8 +58,6 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
                 body: JSON.stringify({
                     nome_cliente: nome_cliente,
                     email: email,
-                    endereco: endereco,
-                    telefone: telefone,
                 }),
             });
     

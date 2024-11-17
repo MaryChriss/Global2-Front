@@ -166,7 +166,13 @@ export default function Dashboard() {
     // sm: md: lg: xl: 2xl:
     return (
         <Layout>
-            <div className="flex items-center justify-center mb-8 min-[320px]:flex-col">
+            <div className="flex items-center justify-center mb-8 
+            sm:flex-col
+            md:flex-col
+            lg:flex-row
+            xl:flex-row
+            2xl:flex-row
+            min-[320px]:flex-col">
                 <h1 className="font-raleway text-xl text-left mr-40 
                 sm:mr-3 ml-5 mt-5
                 md:mr-6
@@ -257,13 +263,13 @@ export default function Dashboard() {
                                 </div>
                         </div>
 
-                        <div className="bg-lime-50 rounded-3xl flex-col w-9/12 justify-center ml-56 text-center
+                        <div className="bg-lime-50 shadow-lg rounded-3xl flex-col w-9/12 justify-center ml-56 text-center
                             sm:ml-20
                             md:ml-28
                             lg:ml-36
                             xl:ml-40
                             2xl:ml-56
-                            min-[320px]:ml-0 min-[320px]:ml-10
+                            min-[320px]:ml-10
                         ">
                         <div className="flex justify-center
                             sm:flex-col sm:text-center sm:gap-2

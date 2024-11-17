@@ -47,7 +47,10 @@ export default function Equipe() {
                 ">
 
                     <div className="text-center text-2xl font-bold mt-0">
+                        <div className="relative">
+                        <Image src="/deco.png" className="absolute ml-16 -mt-8" alt="" width={50} height={50}/>
                         <Image src="/mariFoto.jpg" alt="" className="w-48 h-48 rounded-full border-lime-500" width={200} height={200} />
+                        </div>
                         <p>Mariana Christina <br />
                             RM: 554773
                         </p>
@@ -68,10 +71,13 @@ export default function Equipe() {
                     </div>
 
                     <div className="text-center text-2xl font-bold mt-0">
+                        <div className="relative">
+                        <Image src="/deco.png" className="absolute ml-16 -mt-8" alt="" width={50} height={50}/>
                         <Image src="/henriqueFoto.jpeg" alt="" className="w-48 h-48 rounded-full border-lime-500" width={200} height={200} />
                         <p>Henrique Maciel <br />
                             RM: 556480
                         </p>
+                        </div>
 
                         <div className="flex flex-col justify-center items-center mt-8 mb-9 gap-8">
                             <BotaoRedeSocial
@@ -90,10 +96,13 @@ export default function Equipe() {
                     </div>
 
                     <div className="text-center text-2xl font-bold mt-0">
-                    <Image src="/gabiFoto.jpg" alt="" className="w-48 h-48 rounded-full border-lime-500" width={200} height={200} />
+                        <div className="relative">
+                        <Image src="/deco.png" className="absolute ml-16 -mt-8" alt="" width={50} height={50}/>
+                        <Image src="/gabiFoto.jpg" alt="" className="w-48 h-48 rounded-full border-lime-500" width={200} height={200} />
                         <p>Gabriela Moguinho <br />
                             RM: 556143
                         </p>
+                        </div>
 
                         <div className="flex flex-col justify-center items-center mt-8 mb-9 gap-8">
                             <BotaoRedeSocial

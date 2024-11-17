@@ -1,6 +1,7 @@
-import { Header } from "@/components/Header/Header";
+"use client";
+
 import { Layout } from "@/components/Layout/Layout";
-import { SideMenu } from "@/components/Menu/Menu";
+import { ModalFeedback } from "@/components/ModalFeedback/ModalFeedback";
 import Image from "next/image";
 import Link from "next/link";
 import { BsGraphUpArrow } from "react-icons/bs";
@@ -10,6 +11,7 @@ export default function Home() {
   return (
     
     <Layout>
+      <ModalFeedback/>
       <Image className=" w-full h-56" src="/naturezaa.jpg" alt="paisagem em um monte com muitas arvores" width={1000} height={1000}/>
       <div className="flex flex-col justify-center text-center bg-white">
         <h1 className="font-raleway text-4xl mt-5 mb-5">Por que existimos?</h1>
