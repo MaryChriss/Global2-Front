@@ -1,7 +1,7 @@
 "use client";
 
 import { Layout } from "@/components/Layout/Layout";
-import { ModalFeedback } from "@/components/ModalFeedback/ModalFeedback";
+import ModalFeedback from "@/components/ModalFeedback/ModalFeedback";
 import Image from "next/image";
 import Link from "next/link";
 import { BsGraphUpArrow } from "react-icons/bs";

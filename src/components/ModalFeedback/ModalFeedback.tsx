@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { FaStar } from 'react-icons/fa'; // Importando o ícone de estrela
 
-export const ModalFeedback: React.FC = () => {
+const ModalFeedback: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [comentario, setComentario] = useState('');
     const [avaliacao, setAvaliacao] = useState<number | null>(null);
@@ -17,11 +18,10 @@ export const ModalFeedback: React.FC = () => {
     // Função para alternar visibilidade do modal
     const toggleModal = () => setIsVisible(!isVisible);
 
-    // Mostrar o modal a cada 3 minutos
     useEffect(() => {
         const interval = setInterval(() => {
         setIsVisible(true);
-        }, 180000); // 180000ms = 3 minutos
+        }, 1200000); // =20m
 
         return () => clearInterval(interval); // Limpa o intervalo ao desmontar o componente
     }, []);
@@ -67,18 +67,28 @@ export const ModalFeedback: React.FC = () => {
                 />
                 <div className="mb-4">
                 <label className="block mb-2">Sua Avaliação:</label>
-                <select
-                    className="w-full border p-2 rounded"
-                    value={avaliacao || ''}
-                    onChange={(e) => setAvaliacao(Number(e.target.value))}
-                >
-                    <option value="" disabled>Selecione</option>
+                <div className="flex flex-col gap-2">
                     {[1, 2, 3, 4, 5].map((num) => (
-                    <option key={num} value={num}>
-                        {num} Estrela{num > 1 && 's'}
-                    </option>
+                    <label
+                        key={num}
+                        className="flex items-center gap-2 cursor-pointer"
+                    >
+                        <input
+                        type="radio"
+                        name="avaliacao"
+                        value={num}
+                        checked={avaliacao === num}
+                        onChange={() => setAvaliacao(num)}
+                        className="hidden"
+                        />
+                        <FaStar
+                        size={20}
+                        className={avaliacao === num ? 'text-yellow-500' : 'text-gray-400'}
+                        />
+                        {`${num} Estrela${num > 1 ? 's' : ''}`}
+                    </label>
                     ))}
-                </select>
+                </div>
                 </div>
                 <div className="flex justify-end gap-4">
                 <button
@@ -100,3 +110,5 @@ export const ModalFeedback: React.FC = () => {
         </>
     );
 };
+
+export default ModalFeedback;

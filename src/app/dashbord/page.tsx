@@ -227,7 +227,17 @@ export default function Dashboard() {
                                 </select>
                             </div>
 
-                            <div className="flex justify-center gap-28 mb-5 text-center">
+                            <div className="mb-4 
+                                sm:text-center
+                                md:text-center 
+                                lg:text-center
+                                xl:mb-4
+                                2xl:mb-4">
+                                <label className="block mb-2 font-medium">Seu endereço:</label>
+                                <input type="text" className="py-2 px-4 w-80 bg-[#c3d4a4] rounded-full focus:outline-none min-[320px]:w-56" />
+                            </div>
+
+                            <div className="flex justify-center gap-28 mb-0 text-center">
                             <div className="mb-4 ">
                                 <label className="block mb-2 font-medium">Mês de Referência:</label>
                                 <select
