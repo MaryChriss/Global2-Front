@@ -43,16 +43,17 @@ export default function Perfil() {
         setObjetivos((prev) => ({ ...prev, [field]: value }));
     };
 
+        const [relatorios, setRelatorios] = useState([]);
+        useEffect(() => {
+            const savedRelatorios = JSON.parse(localStorage.getItem('relatorios')) || [];
+            setRelatorios(savedRelatorios);
+        }, []);
+
+
         // sm: md: lg: xl: 2xl:
     return (
         <Layout>
-            <div className="bg-lime-50 bg-center 
-                sm:h-1/4
-                md:h-2/4
-                lg:h-screen
-                xl:h-screen
-                2xl:h-screen
-                min-[320px]:h-full
+            <div className="bg-lime-50 p-4
             ">
                 <section>
                     <div className="flex justify-center text-center pt-20
@@ -153,6 +154,41 @@ export default function Perfil() {
                             ))}
                         </div>
                     </div>
+
+                    <div className="flex-col mr-60 ml-60 bg-slate-50 p-14 rounded-lg shadow-md mt-11 mb-12
+                        sm:flex-col
+                        md:flex-col md:mr-36 md:ml-48
+                        lg:flex-col lg:mr-36 lg:ml-48
+                        xl:flex-col
+                        2xl:flex-col 2xl:text-left
+                        min-[320px]:flex-col min-[320px]:text-center min-[320px]:ml-28
+                    ">
+                        <h4 className="text-lg font-semibold mb-4">Seus relatórios Salvos:</h4>
+                        {relatorios.length > 0 ? (
+                            relatorios.map((relatorio, index) => (
+                                <div key={index} className="mb-8 p-4 border rounded-lg bg-slate-100 shadow-lg">
+                                    <h3 className="text-xl font-semibold">
+                                        Mês de Referência: {relatorio.mesReferencia}
+                                    </h3>
+                                    <p>Tipo de Residência: {relatorio.tipoResidencia}</p>
+                                    <p>Quantidade de Pessoas: {relatorio.quantidadePessoas}</p>
+
+                                    <h4 className="mt-4 font-semibold">Consumo de Eletrodomésticos:</h4>
+                                    {relatorio.consumoReal.map((consumo, idx) => (
+                                        <p key={idx}>
+                                            Eletrodoméstico {idx + 1}: Consumo Real - {consumo} kWh
+                                        </p>
+                                    ))}
+
+                                    <h4 className="mt-4 font-semibold">Consumo do Chuveiro:</h4>
+                                    <p>Consumo Calculado: {relatorio.chuveiroConsumo.toFixed(2)} kWh</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>Nenhum relatório disponível.</p>
+                        )}
+                    </div>
+
                 </section>
             </div>
         </Layout>
