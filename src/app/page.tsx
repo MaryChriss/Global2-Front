@@ -42,9 +42,9 @@ export default function Home() {
 
             <div className=" flex flex-col justify-center text-center items-center">
               <FaLightbulb size={40} className=" text-black " />
-              <p className="font-raleway mt-5">Receba dicas <br/>
-              personalizadas para <br/>
-              economizar</p>
+              <p className="font-raleway mt-5">Acompanhe a evolução <br/>
+              do seu consumo energético
+              </p>
             </div>
 
           </div>

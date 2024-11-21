@@ -13,14 +13,14 @@ interface FormLoginProps {
 }
 
 interface LoginFormData {
-    email: string;
-    password: string;
+    email_login: string;
+    senha_login: string;
 }
 
 
 const schema = Yup.object().shape({
-    email: Yup.string().email("Email inválido").required("Email é obrigatório"),
-    password: Yup.string().required("Senha é obrigatória"),
+    email_login: Yup.string().email("Email inválido").required("Email é obrigatório"),
+    senha_login: Yup.string().required("Senha é obrigatória"),
 });
 
 const FormLogin: React.FC<FormLoginProps> = ({ toggleForm }) => {
@@ -31,12 +31,12 @@ const FormLogin: React.FC<FormLoginProps> = ({ toggleForm }) => {
 
     const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
         try {
-            const response = await fetch(`${apiUrl}/webapi/login/autenticar`, {
+            const response = await fetch(`http://localhost:8080/Global2/webapi/login/autenticar`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    email_login: data.email,
-                    senha_login: data.password,
+                    email_login: data.email_login,
+                    senha_login: data.senha_login,
                 }),
             });
 
@@ -68,10 +68,10 @@ const FormLogin: React.FC<FormLoginProps> = ({ toggleForm }) => {
                         <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60 sm:w-80 md:w-80 lg:w-80 xl:w-80 2xl:w-80"
                             type="text"
                             placeholder="E-mail"
-                            {...register("email")}
+                            {...register("email_login")}
                         />
                     </div>
-                    {errors.email && <p>{errors.email.message}</p>}
+                    {errors.email_login && <p>{errors.email_login.message}</p>}
 
                     <div className=" relative w-full mb-4">
                         <span  className="absolute top-1/2 left-3 transform -translate-y-5 text-2xl text-blue-500">
@@ -79,15 +79,15 @@ const FormLogin: React.FC<FormLoginProps> = ({ toggleForm }) => {
                         </span>
                         <input
                             className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60 sm:w-80 md:w-80 lg:w-80 xl:w-80 2xl:w-80"
-                            type="password"
+                            type="senha_login"
                             placeholder="Senha"
-                            {...register("password")}
+                            {...register("senha_login")}
                         />
                     </div>
-                    {errors.password && <p>{errors.password.message}</p>}
+                    {errors.senha_login && <p>{errors.senha_login.message}</p>}
 
                     <div className="flex justify-center">
-                        <button className="w-1/2 p-1 bg-lime-700 text-white border-none rounded-lg cursor-pointer mb-12" type="submit">Entrar</button>
+                        <button className="w-1/2 p-1 bg-lime-700 hover:bg-lime-600 text-white border-none rounded-lg cursor-pointer mb-12" type="submit">Entrar</button>
                     </div>
                 </form>
                 <a className="flex justify-center text-center mt-4 cursor-pointer text-lime-950 font-itim underline mb-7" onClick={toggleForm}>É novo aqui? Cadastre-se</a>

@@ -72,8 +72,8 @@ export const SideMenu = () => {
                     <div className="mt-auto">
                         {isLoggedIn ? (
                             <>
-                                <BiLogOut size="1.5rem" color="#00a1fc" onClick={handleLogout} style={{ cursor: "pointer" }} />
-                                <span onClick={handleLogout} style={{ cursor: "pointer", color: "#00a1fc" }}>Logout</span>
+                                <BiLogOut size="1.5rem" color="#047a00" onClick={handleLogout} style={{ cursor: "pointer" }} />
+                                <span onClick={handleLogout} style={{ cursor: "pointer", color: "#047a00" }}>Logout</span>
                             </>
                         ) : (
                             <>

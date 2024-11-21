@@ -61,7 +61,7 @@ export default function Dashboard() {
     
 
     
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
     
         if (!formData.tipoResidencia || !formData.mesReferencia || !formData.quantidadePessoas) {
@@ -69,33 +69,57 @@ export default function Dashboard() {
             return;
         }
     
-        if (eletrodomesticosSelecionados.length === 0) {
-            alert("Por favor, selecione pelo menos um eletrodoméstico!");
-            return;
+        try {
+            const loginData = JSON.parse(localStorage.getItem('loginData'));
+            const id_cliente = loginData.cliente.id_cliente;
+    
+            const enderecoData = {
+                id_cliente,
+                endereco_completo: formData.enderecoCompleto,
+            };
+    
+            const enderecoResponse = await fetch('http://localhost:8080/Global2/webapi/endereco', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(enderecoData),
+            });
+    
+            if (!enderecoResponse.ok) {
+                alert('Erro ao salvar endereço.');
+                return;
+            }
+    
+            const enderecoResult = await enderecoResponse.json();
+            const id_endereco = enderecoResult.id_endereco;
+            localStorage.setItem('id_endereco', id_endereco);
+    
+            // Criar relatório associado ao endereço
+            const novoRelatorio = {
+                mesReferencia: formData.mesReferencia,
+                tipoResidencia: formData.tipoResidencia,
+                quantidadePessoas: formData.quantidadePessoas,
+                id_endereco,
+            };
+    
+            const relatorioResponse = await fetch('http://localhost:8080/Global2/webapi/relatorios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novoRelatorio),
+            });
+    
+            if (relatorioResponse.ok) {
+                const relatorio = await relatorioResponse.json();
+                setRelatorios((prev) => [...prev, relatorio]);
+                setShowGraphs(true);
+            } else {
+                alert('Erro ao salvar relatório.');
+            }
+        } catch (error) {
+            console.error('Erro ao salvar endereço/relatório:', error);
+            alert('Erro ao salvar relatório.');
         }
-    
-        if (formData.chuveiro.tem && (!formData.chuveiro.potencia || !formData.chuveiro.tempoBanho || !formData.chuveiro.quantidade)) {
-            alert("Preencha todos os campos do chuveiro!");
-            return;
-        }
-    
-        const novoRelatorio = {
-            mesReferencia: formData.mesReferencia,
-            tipoResidencia: formData.tipoResidencia,
-            quantidadePessoas: formData.quantidadePessoas,
-            consumoReal: eletrodomesticosSelecionados.map(
-                (item) => formData[item.key].consumo * formData[item.key].quantidade
-            ),
-            gastoIdeal: eletrodomesticosSelecionados.map((item) => item.gastoIdeal),
-            chuveiroConsumo: formData.chuveiro.potencia * formData.chuveiro.quantidade * formData.chuveiro.tempoBanho / 60,
-        };
-    
-        const updatedRelatorios = [...relatorios, novoRelatorio];
-        setRelatorios(updatedRelatorios);
-        localStorage.setItem('relatorios', JSON.stringify(updatedRelatorios));
-    
-        setShowGraphs(true);
     };
+    
     
     
 
