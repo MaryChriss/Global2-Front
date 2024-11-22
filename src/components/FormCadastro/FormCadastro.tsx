@@ -33,7 +33,6 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
     const [step, setStep] = useState(1); 
     const [clienteId, setClienteId] = useState<string | null>(null);
     const [email_login, setEmail_login] = useState<string>(""); 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 
     const {
