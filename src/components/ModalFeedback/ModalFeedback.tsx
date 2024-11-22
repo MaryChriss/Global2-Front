@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 const ModalFeedback: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [comentario, setComentario] = useState('');
@@ -44,7 +46,7 @@ const ModalFeedback: React.FC = () => {
         avaliacao,
         };
 
-        fetch('http://localhost:8080/Global2/webapi/feedback', {
+        fetch(`${apiUrl}/webapi/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(feedbackData),

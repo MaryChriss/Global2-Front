@@ -15,10 +15,12 @@ import {
 import CustomInput from '@/components/CustomInput/CustomInput';
 import { Layout } from '@/components/Layout/Layout';
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function Dashboard() {
-    const [relatorios, setRelatorios] = useState([]);
+    const [relatorios, setRelatorios] = useState<any[]>([]);
     const [isClient, setIsClient] = useState(false);
     useEffect(() => setIsClient(true), []);
 
@@ -87,7 +89,7 @@ export default function Dashboard() {
                     endereco_completo: formData.enderecoCompleto,
                 };
         
-                const enderecoResponse = await fetch('http://localhost:8080/Global2/webapi/endereco', {
+                const enderecoResponse = await fetch(`${apiUrl}/webapi/endereco`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(enderecoData),
@@ -107,7 +109,7 @@ export default function Dashboard() {
                     id_endereco,
                 };
         
-                const relatorioResponse = await fetch('http://localhost:8080/Global2/webapi/relatorios', {
+                const relatorioResponse = await fetch(`${apiUrl}/webapi/relatorios`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(novoRelatorio),

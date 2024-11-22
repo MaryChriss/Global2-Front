@@ -31,7 +31,7 @@ const FormLogin: React.FC<FormLoginProps> = ({ toggleForm }) => {
 
     const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
         try {
-            const response = await fetch(`http://localhost:8080/Global2/webapi/login/autenticar`, {
+            const response = await fetch(`${apiUrl}/login/autenticar`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

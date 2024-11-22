@@ -3,6 +3,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 interface ClienteFormData {
     nome_cliente: string;
     email_login: string;
@@ -53,7 +55,7 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
         setEmail_login(email_login); 
     
         try {
-            const response = await fetch(`http://localhost:8080/Global2/webapi/cliente`, {
+            const response = await fetch(`${apiUrl}/webapi/cliente`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -82,7 +84,7 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
     const onSubmitLogin: SubmitHandler<LoginFormData> = async (data) => {
         const { password } = data;
         try {
-            await fetch(`http://localhost:8080/Global2/webapi/login`, {
+            await fetch(`${apiUrl}/webapi/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
