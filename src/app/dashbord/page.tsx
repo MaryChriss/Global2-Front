@@ -34,6 +34,22 @@ export default function Dashboard() {
         maquinaLavar: { tem: false, quantidade: 0, consumo: 0 },
         fornoCooktop: { tem: false, quantidade: 0, consumo: 0 },
     });
+    
+    // Tipo para chaves válidas de formData
+    type EletrodomesticoKeys = keyof typeof formData;
+    
+    const eletrodomesticos = [
+        { nome: 'Geladeira', key: 'geladeira', gastoIdeal: 50 },
+        { nome: 'Ar-condicionado', key: 'arCondicionado', gastoIdeal: 90 },
+        { nome: 'Máquina de Lavar', key: 'maquinaLavar', gastoIdeal: 20 },
+        { nome: 'Forno/Cooktop', key: 'fornoCooktop', gastoIdeal: 120 },
+    ];
+    
+    const eletrodomesticosSelecionados = eletrodomesticos.filter((item) => {
+        const key = item.key as EletrodomesticoKeys; // Confirma que `item.key` é uma chave válida
+        return formData[key]?.tem;
+    });
+    
 
     const [showGraphs, setShowGraphs] = useState(false);
 
@@ -127,18 +143,6 @@ export default function Dashboard() {
                 alert('Erro ao salvar relatório.');
             }
         };
-        
-        // Dados dos eletrodomésticos
-        const eletrodomesticos = [
-            { nome: 'Geladeira', key: 'geladeira', gastoIdeal: 50 },
-            { nome: 'Ar-condicionado', key: 'arCondicionado', gastoIdeal: 90 },
-            { nome: 'Máquina de Lavar', key: 'maquinaLavar', gastoIdeal: 20 },
-            { nome: 'Forno/Cooktop', key: 'fornoCooktop', gastoIdeal: 120 },
-        ];
-        
-        const eletrodomesticosSelecionados = eletrodomesticos.filter(
-            (item) => formData[item.key]?.tem
-        );
         
         const labels = eletrodomesticosSelecionados.map((item) => item.nome);
         const consumoReal = eletrodomesticosSelecionados.map(
