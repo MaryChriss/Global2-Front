@@ -24,6 +24,7 @@ export default function Dashboard() {
     const [isClient, setIsClient] = useState(false);
     useEffect(() => setIsClient(true), []);
 
+
     const [formData, setFormData] = useState({
         quantidade_pessoas: '',
         mes_referencia: '',
@@ -46,8 +47,10 @@ export default function Dashboard() {
     ];
     
     const eletrodomesticosSelecionados = eletrodomesticos.filter((item) => {
-        const key = item.key as EletrodomesticoKeys; // Confirma que `item.key` é uma chave válida
-        return formData[key]?.tem;
+        const key = item.key as EletrodomesticoKeys;
+        const value = formData[key];
+    
+        return typeof value === 'object' && value !== null && 'tem' in value && value.tem;
     });
     
 
