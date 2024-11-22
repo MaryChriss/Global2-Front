@@ -63,76 +63,85 @@ export default function Dashboard() {
             }
         };
         
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-    
-        if (!formData.mes_referencia || !formData.quantidade_pessoas) {
-            alert("Por favor, preencha todos os campos obrigatórios!");
-            return;
-        }
-    
-        try {
-            const loginData = JSON.parse(localStorage.getItem('loginData'));
-            const id_cliente = loginData.cliente.id_cliente;
-    
-            const enderecoData = {
-                cliente: { id_cliente: id_cliente }, 
-                endereco_completo: formData.enderecoCompleto,
-            };
-    
-            const enderecoResponse = await fetch('http://localhost:8080/Global2/webapi/endereco', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(enderecoData),
-            });
-    
-            const enderecoResult = await enderecoResponse.json();
-            const id_endereco = enderecoResult.id_endereco;
-            localStorage.setItem('id_endereco', id_endereco);
-    
-    
-            const novoRelatorio = {
-                mes_referencia: formData.mes_referencia,
-                quantidade_pessoas: formData.quantidade_pessoas,
-                id_endereco,
-            };
-
-            const relatorioResponse = await fetch('http://localhost:8080/Global2/webapi/relatorios', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(novoRelatorio),
-            });
-    
-            if (relatorioResponse.ok) {
+        const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+        
+            if (!formData.mes_referencia || !formData.quantidade_pessoas) {
+                alert("Por favor, preencha todos os campos obrigatórios!");
+                return;
+            }
+        
+            try {
+                const loginData = JSON.parse(localStorage.getItem('loginData') || '{}');
+                const id_cliente = loginData?.cliente?.id_cliente;
+        
+                if (!id_cliente) {
+                    alert("Erro: ID do cliente não encontrado.");
+                    return;
+                }
+        
+                const enderecoData = {
+                    cliente: { id_cliente: id_cliente },
+                    endereco_completo: formData.enderecoCompleto,
+                };
+        
+                const enderecoResponse = await fetch('http://localhost:8080/Global2/webapi/endereco', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(enderecoData),
+                });
+        
+                if (!enderecoResponse.ok) {
+                    throw new Error("Erro ao salvar endereço.");
+                }
+        
+                const enderecoResult = await enderecoResponse.json();
+                const id_endereco = enderecoResult.id_endereco;
+                localStorage.setItem('id_endereco', id_endereco);
+        
+                const novoRelatorio = {
+                    mes_referencia: formData.mes_referencia,
+                    quantidade_pessoas: formData.quantidade_pessoas,
+                    id_endereco,
+                };
+        
+                const relatorioResponse = await fetch('http://localhost:8080/Global2/webapi/relatorios', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(novoRelatorio),
+                });
+        
+                if (!relatorioResponse.ok) {
+                    throw new Error("Erro ao salvar relatório.");
+                }
+        
                 const relatorio = await relatorioResponse.json();
                 setRelatorios((prev) => [...prev, relatorio]);
                 setShowGraphs(true);
-            } else {
+            } catch (error) {
+                console.error('Erro ao salvar endereço/relatório:', error);
                 alert('Erro ao salvar relatório.');
             }
-        } catch (error) {
-            console.error('Erro ao salvar endereço/relatório:', error);
-            alert('Erro ao salvar relatório.');
-        }
-    };
-
-    
-    const eletrodomesticos = [
-        { nome: 'Geladeira', key: 'geladeira', gastoIdeal: 50 },
-        { nome: 'Ar-condicionado', key: 'arCondicionado', gastoIdeal: 90 },
-        { nome: 'Máquina de Lavar', key: 'maquinaLavar', gastoIdeal: 20 },
-        { nome: 'Forno/Cooktop', key: 'fornoCooktop', gastoIdeal: 120 },
-    ];
-
-    const eletrodomesticosSelecionados = eletrodomesticos.filter((item) => formData[item.key].tem);
-
-    const labels = eletrodomesticosSelecionados.map((item) => item.nome);
-    const consumoReal = eletrodomesticosSelecionados.map(
-        (item) => formData[item.key].consumo * formData[item.key].quantidade
-    );
-    const gastoIdeal = eletrodomesticosSelecionados.map((item) => item.gastoIdeal);
-
+        };
+        
+        // Dados dos eletrodomésticos
+        const eletrodomesticos = [
+            { nome: 'Geladeira', key: 'geladeira', gastoIdeal: 50 },
+            { nome: 'Ar-condicionado', key: 'arCondicionado', gastoIdeal: 90 },
+            { nome: 'Máquina de Lavar', key: 'maquinaLavar', gastoIdeal: 20 },
+            { nome: 'Forno/Cooktop', key: 'fornoCooktop', gastoIdeal: 120 },
+        ];
+        
+        const eletrodomesticosSelecionados = eletrodomesticos.filter(
+            (item) => formData[item.key]?.tem
+        );
+        
+        const labels = eletrodomesticosSelecionados.map((item) => item.nome);
+        const consumoReal = eletrodomesticosSelecionados.map(
+            (item) => (formData[item.key]?.consumo || 0) * (formData[item.key]?.quantidade || 0)
+        );
+        const gastoIdeal = eletrodomesticosSelecionados.map((item) => item.gastoIdeal);
+        
     const consumoEletrodomesticosData = {
         labels,
         datasets: [
