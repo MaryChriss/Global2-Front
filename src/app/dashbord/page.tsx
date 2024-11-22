@@ -38,9 +38,9 @@ export default function Dashboard() {
         setRelatorios(savedRelatorios);
     }, []);    
 
-    const handleInputChange = (event) => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type, checked } = event.target;
-        
+    
         if (name.includes(".")) {
             const [category, field] = name.split(".");
             setFormData((prevData) => ({
@@ -57,6 +57,7 @@ export default function Dashboard() {
             }));
         }
     };
+    
     
     const handleSubmit = async (event) => {
         event.preventDefault();
