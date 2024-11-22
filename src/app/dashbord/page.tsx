@@ -11,6 +11,7 @@ import {
     Title,
     Tooltip,
     Legend,
+    ChartOptions,
 } from 'chart.js';
 import CustomInput from '@/components/CustomInput/CustomInput';
 import { Layout } from '@/components/Layout/Layout';
@@ -18,6 +19,8 @@ import { Layout } from '@/components/Layout/Layout';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+
 
 export default function Dashboard() {
     const [relatorios, setRelatorios] = useState<any[]>([]);
@@ -148,9 +151,23 @@ export default function Dashboard() {
         };
         
         const labels = eletrodomesticosSelecionados.map((item) => item.nome);
-        const consumoReal = eletrodomesticosSelecionados.map(
-            (item) => (formData[item.key]?.consumo || 0) * (formData[item.key]?.quantidade || 0)
-        );
+        const consumoReal = eletrodomesticosSelecionados.map((item) => {
+            const key = item.key as keyof typeof formData;
+        
+            // Verificar se formData[key] é um objeto que possui 'consumo' e 'quantidade'
+            const itemData = formData[key];
+        
+            if (itemData && typeof itemData !== 'string' && 'consumo' in itemData && 'quantidade' in itemData) {
+                const consumo = itemData.consumo || 0;
+                const quantidade = itemData.quantidade || 0;
+                return consumo * quantidade;
+            }
+        
+            // Se não for um objeto esperado, retornar 0
+            return 0;
+        });
+        
+        
         const gastoIdeal = eletrodomesticosSelecionados.map((item) => item.gastoIdeal);
         
     const consumoEletrodomesticosData = {
@@ -185,7 +202,7 @@ export default function Dashboard() {
         ],
     };
 
-    const options = {
+    const options: ChartOptions<'bar'> = {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
@@ -195,12 +212,14 @@ export default function Dashboard() {
         },
         plugins: {
             legend: {
-                position: 'top',
+                position: 'top', // Valor compatível
             },
         },
     };
+    
 
     if (!isClient) return null;
+    
 
     // sm: md: lg: xl: 2xl:
     return (
@@ -335,107 +354,127 @@ export default function Dashboard() {
                             2xl:flex-row 2xl:gap-64
                             min-[320px]:flex-col
                         ">
-                            <div>
-                                {['geladeira', 'chuveiro'].map((item) => (
-                                    <div className="" key={item}>
-                                        <h3 className="text-lg font-semibold mb-2 mt-24 ">{item.charAt(0).toUpperCase() + item.slice(1)}</h3>
-                                        <div className="flex items-center mb-5
-                                            sm:text-center sm:justify-center
-                                            md:text-center md:justify-center
-                                            lg:text-center lg:justify-center
-                                            xl:mb-10 xl:mt-0
-                                            2xl:mb-5
-                                        ">
-                                            <input
-                                                type="checkbox"
-                                                name={`${item}.tem`}
-                                                checked={formData[item].tem}
-                                                onChange={handleInputChange}
-                                                className="mr-2"
-                                            />
-                                            <label>Possui?</label>
-                                        </div>
-                                        {formData[item].tem && (
-                                            <div className="space-y-2 ">
-                                                <CustomInput
-                                                    label="Quantidade:"
-                                                    type="number"
-                                                    name={`${item}.quantidade`}
-                                                    value={formData[item].quantidade}
-                                                    onChange={handleInputChange}
-                                                />
-                                                <CustomInput
-                                                    label="Consumo Médio por Unidade (kWh):"
-                                                    type="number"
-                                                    name={`${item}.consumo`}
-                                                    value={formData[item].consumo}
-                                                    onChange={handleInputChange}
-                                                />
-                                                {item === 'chuveiro' && (
-                                                    <>
-                                                        <CustomInput
-                                                            label="Potência do Chuveiro (W):"
-                                                            type="number"
-                                                            name="chuveiro.potencia"
-                                                            value={formData.chuveiro.potencia}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                        <CustomInput
-                                                            label="Tempo Médio no Banho (min):"
-                                                            type="number"
-                                                            name="chuveiro.tempoBanho"
-                                                            value={formData.chuveiro.tempoBanho}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
+                        <div>
+                        {['geladeira', 'chuveiro'].map((item) => {
+                            const key = item as keyof typeof formData;
+                            const value = formData[key];
+                            const hasTem = typeof value === 'object' && value !== null && 'tem' in value;
 
-                                <div>
-                                    {['arCondicionado', 'maquinaLavar'].map((item) => (
-                                        <div key={item}>
-                                            <h3 className="text-lg font-semibold mb-2 mt-24">{item.charAt(0).toUpperCase() + item.slice(1)}</h3>
-                                            <div className="flex items-center mb-5
-                                            sm:text-center sm:justify-center
-                                            md:text-center md:justify-center
-                                            lg:text-center lg:justify-center
-                                            xl:mb-10 xl:mt-0
-                                            2xl:mb-5
-                                            ">
-                                                <input
-                                                    type="checkbox"
-                                                    name={`${item}.tem`}
-                                                    checked={formData[item].tem}
-                                                    onChange={handleInputChange}
-                                                    className="mr-2"
-                                                />
-                                                <label>Possui?</label>
-                                            </div>
-                                            {formData[item].tem && (
-                                                <div className="space-y-2">
-                                                    <CustomInput
-                                                        label="Quantidade:"
-                                                        type="number"
-                                                        name={`${item}.quantidade`}
-                                                        value={formData[item].quantidade}
-                                                        onChange={handleInputChange}
-                                                    />
-                                                    <CustomInput
-                                                        label="Consumo Médio por Unidade (kWh):"
-                                                        type="number"
-                                                        name={`${item}.consumo`}
-                                                        value={formData[item].consumo}
-                                                        onChange={handleInputChange}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
+                            return (
+                                <div className="" key={item}>
+                                <h3 className="text-lg font-semibold mb-2 mt-24 ">
+                                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                                </h3>
+                                <div
+                                    className="flex items-center mb-5
+                                                                    sm:text-center sm:justify-center
+                                                                    md:text-center md:justify-center
+                                                                    lg:text-center lg:justify-center
+                                                                    xl:mb-10 xl:mt-0
+                                                                    2xl:mb-5
+                                                                "
+                                >
+                                    <input
+                                    type="checkbox"
+                                    name={`${item}.tem`}
+                                    checked={hasTem ? value.tem : false}
+                                    onChange={handleInputChange}
+                                    className="mr-2"
+                                    />
+                                    <label>Possui?</label>
                                 </div>
+                                {hasTem && value.tem && (
+                                    <div className="space-y-2 ">
+                                    <CustomInput
+                                        label="Quantidade:"
+                                        type="number"
+                                        name={`${item}.quantidade`}
+                                        value={value.quantidade || 0}
+                                        onChange={handleInputChange}
+                                    />
+                                    <CustomInput
+                                        label="Consumo Médio por Unidade (kWh):"
+                                        type="number"
+                                        name={`${item}.consumo`}
+                                        value={'consumo' in value ? value.consumo || 0 : 0}
+                                        onChange={handleInputChange}
+                                    />
+                                    {item === 'chuveiro' && (
+                                        <>
+                                        <CustomInput
+                                            label="Potência do Chuveiro (W):"
+                                            type="number"
+                                            name="chuveiro.potencia"
+                                            value={'potencia' in value ? value.potencia || 0 : 0}
+                                            onChange={handleInputChange}
+                                        />
+                                        <CustomInput
+                                            label="Tempo Médio no Banho (min):"
+                                            type="number"
+                                            name="chuveiro.tempoBanho"
+                                            value={'tempoBanho' in value ? value.tempoBanho || 0 : 0}
+                                            onChange={handleInputChange}
+                                        />
+                                        </>
+                                    )}
+                                    </div>
+                                )}
+                                </div>
+                            );
+                            })}
+                        </div>
+
+                        <div>
+                            {['arCondicionado', 'maquinaLavar'].map((item) => {
+                            const key = item as keyof typeof formData;
+                            const value = formData[key];
+                            const hasTem = typeof value === 'object' && value !== null && 'tem' in value;
+
+                            return (
+                                <div key={item}>
+                                <h3 className="text-lg font-semibold mb-2 mt-24">
+                                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                                </h3>
+                                <div
+                                    className="flex items-center mb-5
+                                                                    sm:text-center sm:justify-center
+                                                                    md:text-center md:justify-center
+                                                                    lg:text-center lg:justify-center
+                                                                    xl:mb-10 xl:mt-0
+                                                                    2xl:mb-5
+                                                                    "
+                                >
+                                    <input
+                                    type="checkbox"
+                                    name={`${item}.tem`}
+                                    checked={hasTem ? value.tem : false}
+                                    onChange={handleInputChange}
+                                    className="mr-2"
+                                    />
+                                    <label>Possui?</label>
+                                </div>
+                                {hasTem && value.tem && (
+                                    <div className="space-y-2">
+                                    <CustomInput
+                                        label="Quantidade:"
+                                        type="number"
+                                        name={`${item}.quantidade`}
+                                        value={value.quantidade || 0}
+                                        onChange={handleInputChange}
+                                    />
+                                    <CustomInput
+                                        label="Consumo Médio por Unidade (kWh):"
+                                        type="number"
+                                        name={`${item}.consumo`}
+                                        value={'consumo' in value ? value.consumo || 0 : 0}
+                                        onChange={handleInputChange}
+                                    />
+                                    </div>
+                                )}
+                                </div>
+                            );
+                            })}
+                        </div>
                         </div>
 
                             <div className="flex justify-center">
@@ -488,91 +527,161 @@ export default function Dashboard() {
 
                     {showGraphs && eletrodomesticosSelecionados.length > 0 && (
                         <div className="mt-8 mb-6" style={{ height: '400px' }}>
-                            <h3 className="text-xl font-semibold mb-4 mt-20 ml-9">Gráfico de Consumo dos Eletrodomésticos</h3>
+                            <h3 className="text-xl font-semibold mb-4 mt-20 ml-9">
+                            Gráfico de Consumo dos Eletrodomésticos
+                            </h3>
                             <Bar data={consumoEletrodomesticosData} options={options} />
                         </div>
-                    )}
+                        )}
 
-                    {showGraphs && formData.chuveiro.tem && (
+                        {showGraphs && formData.chuveiro?.tem && (
                         <div className="mt-20 mb-36" style={{ height: '400px' }}>
-                            <h3 className="text-xl font-semibold mb-6  ml-9">Consumo Específico do Chuveiro</h3>
+                            <h3 className="text-xl font-semibold mb-6  ml-9">
+                            Consumo Específico do Chuveiro
+                            </h3>
                             <Bar data={chuveiroData} options={options} />
                         </div>
-                    )}
+                        )}
 
                         {showGraphs && (
-                            <div className="mt-12 mb-36">
-                                <h3 className="text-xl font-semibold mb-6 ml-9">Relatório de Consumo</h3>
-                                <p className="ml-9">Mês de Referência: {formData.mes_referencia || "Não especificado"}</p>
-                                <div className="bg-lime-50 p-6 rounded-lg w-10/12 mx-auto mt-6">
-                                    {eletrodomesticosSelecionados.length > 0 ? (
-                                        eletrodomesticosSelecionados.map((item, index) => {
-                                            const consumoReal = formData[item.key].consumo * formData[item.key].quantidade;
-                                            const consumoIdeal = item.gastoIdeal;
-                                            const status = consumoReal <= consumoIdeal ? 'Dentro do Ideal' : 'Acima do Ideal';
-                                            const color = consumoReal <= consumoIdeal ? 'text-green-700' : 'text-red-700';
+                        <div className="mt-12 mb-36">
+                            <h3 className="text-xl font-semibold mb-6 ml-9">Relatório de Consumo</h3>
+                            <p className="ml-9">Mês de Referência: {formData.mes_referencia || "Não especificado"}</p>
+                            <div className="bg-lime-50 p-6 rounded-lg w-10/12 mx-auto mt-6">
+                            {eletrodomesticosSelecionados.length > 0 ? (
+                                eletrodomesticosSelecionados.map((item, index) => {
+                                const key = item.key as keyof typeof formData;
+                                const value = formData[key];
 
-                                            return (
-                                                <div key={index} className="flex justify-between py-2 border-b min-[320px]:flex-col">
-                                                    <span className="font-semibold">{item.nome}</span>
-                                                    <span>Consumo Real: <br/> {consumoReal.toFixed(2)} kWh</span>
-                                                    <span>Consumo Ideal: <br/>  {consumoIdeal.toFixed(2)} kWh</span>
-                                                    <span className={`font-semibold ${color}`}>{status}</span>
-                                                </div>
-                                            );
-                                        })
-                                    ) : (
-                                        <p className="text-center">Nenhum eletrodoméstico selecionado.</p>
-                                    )}
-                                    {formData.chuveiro.tem && (
-                                        <div className="flex justify-between py-2 mt-4 border-t min-[320px]:flex-col">
-                                            <span className="font-semibold">Chuveiro</span>
-                                            <span>
-                                                Consumo Real: <br/>  {(formData.chuveiro.potencia * formData.chuveiro.quantidade * formData.chuveiro.tempoBanho / 60).toFixed(2)} kWh
-                                            </span>
-                                            <span>Consumo Ideal: <br/>  60 kWh</span>
-                                            <span className={`${(formData.chuveiro.potencia * formData.chuveiro.quantidade * formData.chuveiro.tempoBanho / 60) <= 60 ? 'text-green-700' : 'text-red-700'} font-semibold`}>
-                                                {(formData.chuveiro.potencia * formData.chuveiro.quantidade * formData.chuveiro.tempoBanho / 60) <= 60 ? 'Dentro do Ideal' : 'Acima do Ideal'}
-                                            </span>
-                                        </div>
-                                    )}
+                                if (
+                                    typeof value === 'object' &&
+                                    value !== null &&
+                                    'consumo' in value &&
+                                    'quantidade' in value
+                                ) {
+                                    const consumoReal = value.consumo * value.quantidade;
+                                    const consumoIdeal = item.gastoIdeal;
+                                    const status = consumoReal <= consumoIdeal ? 'Dentro do Ideal' : 'Acima do Ideal';
+                                    const color = consumoReal <= consumoIdeal ? 'text-green-700' : 'text-red-700';
+
+                                    return (
+                                    <div key={index} className="flex justify-between py-2 border-b min-[320px]:flex-col">
+                                        <span className="font-semibold">{item.nome}</span>
+                                        <span>
+                                        Consumo Real: <br /> {consumoReal.toFixed(2)} kWh
+                                        </span>
+                                        <span>
+                                        Consumo Ideal: <br /> {consumoIdeal.toFixed(2)} kWh
+                                        </span>
+                                        <span className={`font-semibold ${color}`}>{status}</span>
+                                    </div>
+                                    );
+                                }
+
+                                return null;
+                                })
+                            ) : (
+                                <p className="text-center">Nenhum eletrodoméstico selecionado.</p>
+                            )}
+
+                            {formData.chuveiro.tem && (
+                                <div className="flex justify-between py-2 mt-4 border-t min-[320px]:flex-col">
+                                <span className="font-semibold">Chuveiro</span>
+                                <span>
+                                    Consumo Real: <br />{' '}
+                                    {(formData.chuveiro.potencia *
+                                    formData.chuveiro.quantidade *
+                                    formData.chuveiro.tempoBanho) /
+                                    60}
+                                    kWh
+                                </span>
+                                <span>Consumo Ideal: <br /> 60 kWh</span>
+                                <span
+                                    className={`${
+                                    (formData.chuveiro.potencia *
+                                        formData.chuveiro.quantidade *
+                                        formData.chuveiro.tempoBanho) /
+                                        60 <=
+                                    60
+                                        ? 'text-green-700'
+                                        : 'text-red-700'
+                                    } font-semibold`}
+                                >
+                                    {(formData.chuveiro.potencia *
+                                    formData.chuveiro.quantidade *
+                                    formData.chuveiro.tempoBanho) /
+                                    60 <=
+                                    60
+                                    ? 'Dentro do Ideal'
+                                    : 'Acima do Ideal'}
+                                </span>
+                                </div>
+                            )}
 
                             {relatorios.map((relatorio, index) => (
                                 <div key={index} className="mb-8 p-4 border border-gray-300 rounded-lg">
-                                    <h3 className="text-xl font-semibold">
-                                        Mês de Referência: {relatorio.mesReferencia || relatorio.mes_referencia}
-                                    </h3>
-                                    <p>Tipo de Residência: {relatorio.tipoResidencia || 'Não especificado'}</p>
-                                    <p>Quantidade de Pessoas: {relatorio.quantidadePessoas || 'Não especificado'}</p>
+                                <h3 className="text-xl font-semibold">
+                                    Mês de Referência: {relatorio.mesReferencia || relatorio.mes_referencia}
+                                </h3>
+                                <p>Tipo de Residência: {relatorio.tipoResidencia || 'Não especificado'}</p>
+                                <p>Quantidade de Pessoas: {relatorio.quantidadePessoas || 'Não especificado'}</p>
 
-                                    {relatorio.consumoReal && relatorio.gastoIdeal ? (
-                                        <>
-                                            <h4 className="mt-4 text-lg font-semibold">Consumo de Eletrodomésticos:</h4>
-                                            {eletrodomesticosSelecionados.map((item, idx) => (
-                                                <div key={idx}>
-                                                    <p>
-                                                        {item.nome}: Consumo Real - {relatorio.consumoReal[idx]} kWh, Gasto Ideal - {relatorio.gastoIdeal[idx]} kWh
-                                                    </p>
-                                                </div>
-                                            ))}
-                                        </>
-                                    ) : (
-                                        <p className="mt-4">Informações de consumo não disponíveis para este relatório.</p>
-                                    )}
+                                {relatorio.consumoReal && relatorio.gastoIdeal ? (
+                                    <>
+                                    <h4 className="mt-4 text-lg font-semibold">Consumo de Eletrodomésticos:</h4>
+                                    {eletrodomesticosSelecionados.map((item, idx) => (
+                                        <div key={idx}>
+                                        <p>
+                                            {item.nome}: Consumo Real - {relatorio.consumoReal[idx]} kWh, Gasto Ideal -{' '}
+                                            {relatorio.gastoIdeal[idx]} kWh
+                                        </p>
+                                        </div>
+                                    ))}
+                                    </>
+                                ) : (
+                                    <p className="mt-4">Informações de consumo não disponíveis para este relatório.</p>
+                                )}
 
-                                    {relatorio.chuveiroConsumo !== undefined && (
-                                        <h4 className="mt-4 text-lg font-semibold">Consumo do Chuveiro:</h4>
-                                    )}
-                                    <p>
-                                        Consumo Calculado: {relatorio.chuveiroConsumo ? relatorio.chuveiroConsumo.toFixed(2) : 'N/A'} kWh
-                                    </p>
+                                {relatorio.chuveiroConsumo !== undefined && (
+                                    <h4 className="mt-4 text-lg font-semibold">Consumo do Chuveiro:</h4>
+                                )}
+                                <p>
+                                    Consumo Calculado:{' '}
+                                    {relatorio.chuveiroConsumo ? relatorio.chuveiroConsumo.toFixed(2) : 'N/A'} kWh
+                                </p>
                                 </div>
                             ))}
 
+                            {/* Novo cálculo ou seção adicionada */}
+                            <div className="mt-8">
+                                <h4 className="text-lg font-semibold">Consumo Total:</h4>
+                                <p>
+                                Total Real: {eletrodomesticosSelecionados.reduce((total, item) => {
+                                    const key = item.key as keyof typeof formData;
+                                    const value = formData[key];
+                                    if (
+                                    typeof value === 'object' &&
+                                    value !== null &&
+                                    'consumo' in value &&
+                                    'quantidade' in value
+                                    ) {
+                                    return total + value.consumo * value.quantidade;
+                                    }
+                                    return total;
+                                }, 0).toFixed(2)}{' '}
+                                kWh
+                                </p>
+                                <p>
+                                Total Ideal: {eletrodomesticosSelecionados.reduce((total, item) => {
+                                    return total + item.gastoIdeal;
+                                }, 0).toFixed(2)}{' '}
+                                kWh
+                                </p>
+                            </div>
+                            </div>
                         </div>
-                </div>
-                )}
-                </div>
+                        )}
+                        </div>
         </Layout>
     );
 };

@@ -1,5 +1,16 @@
 import React from 'react';
 
+interface CustomInputProps {
+    label?: string;
+    type?: "text" | "number" | "password" | "email"; // Definindo tipos para 'type'
+    name: string;
+    value: string | number;
+    onChange: React.ChangeEventHandler<HTMLInputElement>;
+    min?: string;
+    placeholder?: string;
+    className?: string;
+}
+
 export default function CustomInput({
     label,
     type = "text",
@@ -9,7 +20,7 @@ export default function CustomInput({
     min = "0",
     placeholder = "",
     className = ""
-}) {
+}: CustomInputProps) {
     return (
         <div className="mb-4">
             {label && <label className="block mb-1 font-medium ">{label}</label>}
