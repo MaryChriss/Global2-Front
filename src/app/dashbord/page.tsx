@@ -34,9 +34,9 @@ export default function Dashboard() {
     const [showGraphs, setShowGraphs] = useState(false);
 
     useEffect(() => {
-        const savedRelatorios = JSON.parse(localStorage.getItem('relatorios')) || [];
+        const savedRelatorios = JSON.parse(localStorage.getItem('relatorios') || '[]');
         setRelatorios(savedRelatorios);
-    }, []);
+    }, []);    
 
     const handleInputChange = (event) => {
         const { name, value, type, checked } = event.target;
