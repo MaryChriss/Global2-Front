@@ -16,7 +16,7 @@ import {
 import CustomInput from '@/components/CustomInput/CustomInput';
 import { Layout } from '@/components/Layout/Layout';
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiUrl = process.env.NEXT_API_URL;
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -39,7 +39,6 @@ export default function Dashboard() {
         fornoCooktop: { tem: false, quantidade: 0, consumo: 0 },
     });
     
-    // Tipo para chaves válidas de formData
     type EletrodomesticoKeys = keyof typeof formData;
     
     const eletrodomesticos = [
@@ -111,7 +110,7 @@ export default function Dashboard() {
                     endereco_completo: formData.enderecoCompleto,
                 };
         
-                const enderecoResponse = await fetch(`http://localhost:8080/Global2/webapi/endereco`, {
+                const enderecoResponse = await fetch(`${apiUrl}/webapi/endereco`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(enderecoData),
@@ -131,7 +130,7 @@ export default function Dashboard() {
                     id_endereco,
                 };
         
-                const relatorioResponse = await fetch(`http://localhost:8080/Global2/webapi/relatorios`, {
+                const relatorioResponse = await fetch(`${apiUrl}/webapi/relatorios`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(novoRelatorio),
@@ -154,7 +153,6 @@ export default function Dashboard() {
         const consumoReal = eletrodomesticosSelecionados.map((item) => {
             const key = item.key as keyof typeof formData;
         
-            // Verificar se formData[key] é um objeto que possui 'consumo' e 'quantidade'
             const itemData = formData[key];
         
             if (itemData && typeof itemData !== 'string' && 'consumo' in itemData && 'quantidade' in itemData) {
@@ -163,7 +161,6 @@ export default function Dashboard() {
                 return consumo * quantidade;
             }
         
-            // Se não for um objeto esperado, retornar 0
             return 0;
         });
         
@@ -212,7 +209,7 @@ export default function Dashboard() {
         },
         plugins: {
             legend: {
-                position: 'top', // Valor compatível
+                position: 'top',
             },
         },
     };
@@ -652,7 +649,6 @@ export default function Dashboard() {
                                 </div>
                             ))}
 
-                            {/* Novo cálculo ou seção adicionada */}
                             <div className="mt-8">
                                 <h4 className="text-lg font-semibold">Consumo Total:</h4>
                                 <p>

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Layout } from "../../components/Layout/Layout";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiUrl = process.env.NEXT_API_URL;
 interface User {
     name: string;
     email: string;
@@ -64,7 +64,7 @@ export default function Perfil() {
                 meta_agua: objetivos.agua,
             };
     
-            const response = await fetch(`http://localhost:8080/Global2/webapi/objetivos`, {
+            const response = await fetch(`${apiUrl}/webapi/objetivos`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
