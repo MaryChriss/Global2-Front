@@ -63,7 +63,7 @@ export const SideMenu = () => {
                         </li>
 
                         <li>
-                            <Link href="/equipe" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
+                            <Link href="/equipeEcoHome" className="block px-2 py-1 rounded font-itim text-black hover:bg-lime-100">
                                 <RiTeamFill size={24} className="inline-block mr-2 text-lime-600" /> Equipe
                             </Link>
                         </li>
