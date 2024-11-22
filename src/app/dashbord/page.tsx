@@ -39,7 +39,9 @@ export default function Dashboard() {
     }, []);    
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type, checked } = event.target;
+        const { name, value, type } = event.target;
+    
+        const checked = type === "checkbox" ? (event.target as HTMLInputElement).checked : undefined;
     
         if (name.includes(".")) {
             const [category, field] = name.split(".");
@@ -57,6 +59,7 @@ export default function Dashboard() {
             }));
         }
     };
+    
     
     
     const handleSubmit = async (event) => {
