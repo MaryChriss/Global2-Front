@@ -25,6 +25,7 @@ export default function Dashboard() {
     const [formData, setFormData] = useState({
         quantidade_pessoas: '',
         mes_referencia: '',
+        enderecoCompleto: '',
         geladeira: { tem: false, quantidade: 0, consumo: 0 },
         chuveiro: { tem: false, quantidade: 0, potencia: 0, tempoBanho: 0 },
         arCondicionado: { tem: false, quantidade: 0, consumo: 0 },
