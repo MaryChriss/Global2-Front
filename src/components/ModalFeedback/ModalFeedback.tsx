@@ -46,7 +46,7 @@ const ModalFeedback: React.FC = () => {
         avaliacao,
         };
 
-        fetch(`${apiUrl}/webapi/feedback`, {
+        fetch(`http://localhost:8080/Global2/webapi/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(feedbackData),

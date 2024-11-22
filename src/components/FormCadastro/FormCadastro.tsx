@@ -55,7 +55,7 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
         setEmail_login(email_login); 
     
         try {
-            const response = await fetch(`${apiUrl}/webapi/cliente`, {
+            const response = await fetch(`http://localhost:8080/Global2/webapi/cliente`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -84,7 +84,7 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
     const onSubmitLogin: SubmitHandler<LoginFormData> = async (data) => {
         const { password } = data;
         try {
-            await fetch(`${apiUrl}/webapi/login`, {
+            await fetch(`http://localhost:8080/Global2/webapi/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

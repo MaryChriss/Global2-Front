@@ -64,7 +64,7 @@ export default function Perfil() {
                 meta_agua: objetivos.agua,
             };
     
-            const response = await fetch(`${apiUrl}/webapi/objetivos`, {
+            const response = await fetch(`http://localhost:8080/Global2/webapi/objetivos`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

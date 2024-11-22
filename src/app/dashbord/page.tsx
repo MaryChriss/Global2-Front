@@ -111,7 +111,7 @@ export default function Dashboard() {
                     endereco_completo: formData.enderecoCompleto,
                 };
         
-                const enderecoResponse = await fetch(`${apiUrl}/webapi/endereco`, {
+                const enderecoResponse = await fetch(`http://localhost:8080/Global2/webapi/endereco`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(enderecoData),
@@ -131,7 +131,7 @@ export default function Dashboard() {
                     id_endereco,
                 };
         
-                const relatorioResponse = await fetch(`${apiUrl}/webapi/relatorios`, {
+                const relatorioResponse = await fetch(`http://localhost:8080/Global2/webapi/relatorios`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(novoRelatorio),
