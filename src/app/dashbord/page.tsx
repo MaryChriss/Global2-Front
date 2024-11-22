@@ -38,30 +38,32 @@ export default function Dashboard() {
         setRelatorios(savedRelatorios);
     }, []);    
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = event.target;
-    
-        const checked = type === "checkbox" ? (event.target as HTMLInputElement).checked : undefined;
-    
-        if (name.includes(".")) {
+    const handleInputChange = (
+        event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+        ) => {
+            const { name, value, type } = event.target;
+        
+            const checked =
+            type === "checkbox" ? (event.target as HTMLInputElement).checked : undefined;
+        
+            if (name.includes(".")) {
             const [category, field] = name.split(".");
             setFormData((prevData) => ({
                 ...prevData,
                 [category]: {
-                    ...prevData[category],
-                    [field]: type === "checkbox" ? checked : value,
+                ...(prevData[category as keyof typeof prevData] as Record<string, any>),
+                [field]: type === "checkbox" ? checked : value,
                 },
             }));
-        } else {
+            } else {
             setFormData((prevData) => ({
                 ...prevData,
                 [name]: type === "checkbox" ? checked : value,
             }));
-        }
-    };
-    
-    
-    
+            }
+        };
+        
+
     const handleSubmit = async (event) => {
         event.preventDefault();
     
