@@ -23,8 +23,7 @@ export default function Dashboard() {
     useEffect(() => setIsClient(true), []);
 
     const [formData, setFormData] = useState({
-        tipoResidencia: '',
-        quantidadePessoas: '',
+        quantidade_pessoas: '',
         geladeira: { tem: false, quantidade: 0, consumo: 0 },
         chuveiro: { tem: false, quantidade: 0, potencia: 0, tempoBanho: 0 },
         arCondicionado: { tem: false, quantidade: 0, consumo: 0 },
@@ -59,46 +58,60 @@ export default function Dashboard() {
         }
     };
     
-
-    
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
     
-        if (!formData.tipoResidencia || !formData.mesReferencia || !formData.quantidadePessoas) {
+        if (!formData.mes_referencia || !formData.quantidade_pessoas) {
             alert("Por favor, preencha todos os campos obrigatórios!");
             return;
         }
     
-        if (eletrodomesticosSelecionados.length === 0) {
-            alert("Por favor, selecione pelo menos um eletrodoméstico!");
-            return;
-        }
+        try {
+            const loginData = JSON.parse(localStorage.getItem('loginData'));
+            const id_cliente = loginData.cliente.id_cliente;
     
-        if (formData.chuveiro.tem && (!formData.chuveiro.potencia || !formData.chuveiro.tempoBanho || !formData.chuveiro.quantidade)) {
-            alert("Preencha todos os campos do chuveiro!");
-            return;
-        }
+            const enderecoData = {
+                cliente: { id_cliente: id_cliente }, 
+                endereco_completo: formData.enderecoCompleto,
+            };
     
-        const novoRelatorio = {
-            mesReferencia: formData.mesReferencia,
-            tipoResidencia: formData.tipoResidencia,
-            quantidadePessoas: formData.quantidadePessoas,
-            consumoReal: eletrodomesticosSelecionados.map(
-                (item) => formData[item.key].consumo * formData[item.key].quantidade
-            ),
-            gastoIdeal: eletrodomesticosSelecionados.map((item) => item.gastoIdeal),
-            chuveiroConsumo: formData.chuveiro.potencia * formData.chuveiro.quantidade * formData.chuveiro.tempoBanho / 60,
-        };
+            const enderecoResponse = await fetch('http://localhost:8080/Global2/webapi/endereco', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(enderecoData),
+            });
     
-        const updatedRelatorios = [...relatorios, novoRelatorio];
-        setRelatorios(updatedRelatorios);
-        localStorage.setItem('relatorios', JSON.stringify(updatedRelatorios));
-    
-        setShowGraphs(true);
-    };
+            const enderecoResult = await enderecoResponse.json();
+            const id_endereco = enderecoResult.id_endereco;
+            localStorage.setItem('id_endereco', id_endereco);
     
     
+            const novoRelatorio = {
+                mes_referencia: formData.mes_referencia,
+                quantidade_pessoas: formData.quantidade_pessoas,
+                id_endereco,
+            };
 
+            const relatorioResponse = await fetch('http://localhost:8080/Global2/webapi/relatorios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novoRelatorio),
+            });
+    
+            if (relatorioResponse.ok) {
+                const relatorio = await relatorioResponse.json();
+                setRelatorios((prev) => [...prev, relatorio]);
+                setShowGraphs(true);
+            } else {
+                alert('Erro ao salvar relatório.');
+            }
+        } catch (error) {
+            console.error('Erro ao salvar endereço/relatório:', error);
+            alert('Erro ao salvar relatório.');
+        }
+    };
+
+    
     const eletrodomesticos = [
         { nome: 'Geladeira', key: 'geladeira', gastoIdeal: 50 },
         { nome: 'Ar-condicionado', key: 'arCondicionado', gastoIdeal: 90 },
@@ -195,8 +208,8 @@ export default function Dashboard() {
             </div>
 
                 <div className="">
+
                     <h2 className="text-2xl font-bold font-crimson mb-7 ml-9">Dados de Consumo de Energia</h2>
-                    <p className="mb-7 ml-9 font-itim" >(Coloque o consumo medio por mês!)</p>
                     <form onSubmit={handleSubmit} className="space-y-6">
 
                         <div className="flex gap-28 justify-center items-center
@@ -217,7 +230,6 @@ export default function Dashboard() {
                                 <label className="block mb-2 font-medium">Tipo de Residência:</label>
                                 <select
                                     name="tipoResidencia"
-                                    value={formData.tipoResidencia}
                                     onChange={handleInputChange}
                                     className="py-2 px-4 w-80 bg-[#c3d4a4] rounded-full focus:outline-none min-[320px]:w-56"
                                 >
@@ -228,21 +240,27 @@ export default function Dashboard() {
                             </div>
 
                             <div className="mb-4 
-                                sm:text-center
-                                md:text-center 
-                                lg:text-center
-                                xl:mb-4
-                                2xl:mb-4">
-                                <label className="block mb-2 font-medium">Seu endereço:</label>
-                                <input type="text" className="py-2 px-4 w-80 bg-[#c3d4a4] rounded-full focus:outline-none min-[320px]:w-56" />
-                            </div>
+                                    sm:text-center
+                                    md:text-center 
+                                    lg:text-center
+                                    xl:mb-4
+                                    2xl:mb-4">
+                                    <label className="block mb-2 font-medium">Seu endereço:</label>
+                                    <input 
+                                        type="text" 
+                                        name="enderecoCompleto" 
+                                        value={formData.enderecoCompleto || ''} 
+                                        onChange={handleInputChange} 
+                                        className="py-2 px-4 w-80 bg-[#c3d4a4] rounded-full focus:outline-none min-[320px]:w-56" 
+                                    />
+                                </div>
 
                             <div className="flex justify-center gap-28 mb-0 text-center">
                             <div className="mb-4 ">
                                 <label className="block mb-2 font-medium">Mês de Referência:</label>
                                 <select
-                                    name="mesReferencia"
-                                    value={formData.mesReferencia || ''}
+                                    name="mes_referencia"
+                                    value={formData.mes_referencia || ''}
                                     onChange={handleInputChange}
                                     className="py-2 px-4 w-80 bg-[#c3d4a4] rounded-full focus:outline-none min-[320px]:w-56"
                                 >
@@ -265,14 +283,16 @@ export default function Dashboard() {
                                     <CustomInput
                                         label="Quantidade de Pessoas:"
                                         type="number"
-                                        name="quantidadePessoas"
-                                        value={formData.quantidadePessoas}
+                                        name="quantidade_pessoas"
+                                        value={formData.quantidade_pessoas}
                                         onChange={handleInputChange}
                                         min="1"
                                     />
                                 </div>
                         </div>
+                    </form>
 
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="bg-lime-50 shadow-lg rounded-3xl flex-col w-9/12 justify-center ml-56 text-center
                             sm:ml-20
                             md:ml-28
@@ -392,7 +412,6 @@ export default function Dashboard() {
                                 </div>
                         </div>
 
-
                             <div className="flex justify-center">
                                 <div className="mt-9">
                                     <h3 className="text-lg font-semibold mb-2 mt-12">Forno/Cooktop</h3>
@@ -439,6 +458,7 @@ export default function Dashboard() {
 
                         </div>
                     </form>
+                    
 
                     {showGraphs && eletrodomesticosSelecionados.length > 0 && (
                         <div className="mt-8 mb-6" style={{ height: '400px' }}>
@@ -457,7 +477,7 @@ export default function Dashboard() {
                         {showGraphs && (
                             <div className="mt-12 mb-36">
                                 <h3 className="text-xl font-semibold mb-6 ml-9">Relatório de Consumo</h3>
-                                <p className="ml-9">Mês de Referência: {formData.mesReferencia || "Não especificado"}</p>
+                                <p className="ml-9">Mês de Referência: {formData.mes_referencia || "Não especificado"}</p>
                                 <div className="bg-lime-50 p-6 rounded-lg w-10/12 mx-auto mt-6">
                                     {eletrodomesticosSelecionados.length > 0 ? (
                                         eletrodomesticosSelecionados.map((item, index) => {
@@ -491,37 +511,41 @@ export default function Dashboard() {
                                         </div>
                                     )}
 
-                        {relatorios.length > 0 && (
-                            <div className="mt-10">
-                                <h2 className="text-2xl font-bold">Relatórios Salvos:</h2>
-                                {relatorios.map((relatorio, index) => (
-                                    <div key={index} className="mb-8 p-4 border border-gray-300 rounded-lg">
-                                        <h3 className="text-xl font-semibold">
-                                            Mês de Referência: {relatorio.mesReferencia}
-                                        </h3>
-                                        <p>Tipo de Residência: {relatorio.tipoResidencia}</p>
-                                        <p>Quantidade de Pessoas: {relatorio.quantidadePessoas}</p>
+                            {relatorios.map((relatorio, index) => (
+                                <div key={index} className="mb-8 p-4 border border-gray-300 rounded-lg">
+                                    <h3 className="text-xl font-semibold">
+                                        Mês de Referência: {relatorio.mesReferencia || relatorio.mes_referencia}
+                                    </h3>
+                                    <p>Tipo de Residência: {relatorio.tipoResidencia || 'Não especificado'}</p>
+                                    <p>Quantidade de Pessoas: {relatorio.quantidadePessoas || 'Não especificado'}</p>
 
-                                        <h4 className="mt-4 text-lg font-semibold">Consumo de Eletrodomésticos:</h4>
-                                        {eletrodomesticosSelecionados.map((item, idx) => (
-                                            <div key={idx}>
-                                                <p>
-                                                    {item.nome}: Consumo Real - {relatorio.consumoReal[idx]} kWh, Gasto Ideal - {relatorio.gastoIdeal[idx]} kWh
-                                                </p>
-                                            </div>
-                                        ))}
+                                    {relatorio.consumoReal && relatorio.gastoIdeal ? (
+                                        <>
+                                            <h4 className="mt-4 text-lg font-semibold">Consumo de Eletrodomésticos:</h4>
+                                            {eletrodomesticosSelecionados.map((item, idx) => (
+                                                <div key={idx}>
+                                                    <p>
+                                                        {item.nome}: Consumo Real - {relatorio.consumoReal[idx]} kWh, Gasto Ideal - {relatorio.gastoIdeal[idx]} kWh
+                                                    </p>
+                                                </div>
+                                            ))}
+                                        </>
+                                    ) : (
+                                        <p className="mt-4">Informações de consumo não disponíveis para este relatório.</p>
+                                    )}
 
-                    <h4 className="mt-4 text-lg font-semibold">Consumo do Chuveiro:</h4>
-                    <p>
-                        Consumo Calculado: {relatorio.chuveiroConsumo.toFixed(2)} kWh
-                    </p>
-                    </div>
-                                ))}
-                            </div>
-                        )}
+                                    {relatorio.chuveiroConsumo !== undefined && (
+                                        <h4 className="mt-4 text-lg font-semibold">Consumo do Chuveiro:</h4>
+                                    )}
+                                    <p>
+                                        Consumo Calculado: {relatorio.chuveiroConsumo ? relatorio.chuveiroConsumo.toFixed(2) : 'N/A'} kWh
+                                    </p>
                                 </div>
-                            </div>
-                        )}
+                            ))}
+
+                        </div>
+                </div>
+                )}
                 </div>
         </Layout>
     );

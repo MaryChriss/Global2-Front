@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+
 interface ClienteFormData {
     nome_cliente: string;
-    email: string;
+    email_login: string;
 }
 
 interface LoginFormData {
@@ -18,7 +19,7 @@ interface FormCadastroProps {
 
 const schemaCliente = Yup.object().shape({
     nome_cliente: Yup.string().required("Nome é obrigatório"),
-    email: Yup.string().email("Email inválido").required("Email é obrigatório"),
+    email_login: Yup.string().email("Email inválido").required("Email é obrigatório"),
 });
 
 const schemaLogin = Yup.object().shape({
@@ -31,8 +32,8 @@ const schemaLogin = Yup.object().shape({
 const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
     const [step, setStep] = useState(1); 
     const [clienteId, setClienteId] = useState<string | null>(null);
-    const [email, setEmail] = useState<string>(""); 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const [email_login, setEmail_login] = useState<string>(""); 
+
 
     const {
         register: registerCliente,
@@ -48,24 +49,23 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
     } = useForm<LoginFormData>({ resolver: yupResolver(schemaLogin), defaultValues: {password: "", confirmPassword: ""} });
 
     const onSubmitCliente: SubmitHandler<ClienteFormData> = async (login) => {
-        const { nome_cliente, email,} = login;
-        setEmail(email); 
+        const { nome_cliente, email_login,} = login;
+        setEmail_login(email_login); 
     
         try {
-            const response = await fetch(`${apiUrl}/webapi/cliente`, {
+            const response = await fetch(`http://localhost:8080/Global2/webapi/cliente`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     nome_cliente: nome_cliente,
-                    email: email,
+                    email_login: email_login,
                 }),
             });
     
             if (response.ok) {
                 const result = await response.json();
                 setClienteId(result.id_cliente);
-                setEmail(result.email);
-
+                setEmail_login(email_login);
                 resetLoginForm();
                 setStep(2);
             } else {
@@ -82,11 +82,11 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
     const onSubmitLogin: SubmitHandler<LoginFormData> = async (data) => {
         const { password } = data;
         try {
-            await fetch(`${apiUrl}/webapi/login`, {
+            await fetch(`http://localhost:8080/Global2/webapi/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    email_login: email ,
+                    email_login: email_login ,
                     senha_login: password,
                     id_cliente: clienteId ,
                 }),
@@ -109,15 +109,15 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
                         <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60 sm:w-80 md:w-80 lg:w-80 xl:w-80 2xl:w-80" type="text" placeholder="Nome Completo" {...registerCliente("nome_cliente")} />
                         {errorsCliente.nome_cliente && <p>{errorsCliente.nome_cliente.message}</p>}
 
-                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60 sm:w-80 md:w-80 lg:w-80 xl:w-80 2xl:w-80" type="email" placeholder="Email" {...registerCliente("email")} />
-                        {errorsCliente.email && <p>{errorsCliente.email.message}</p>}
+                        <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60 sm:w-80 md:w-80 lg:w-80 xl:w-80 2xl:w-80" type="email" placeholder="Email" {...registerCliente("email_login")} />
+                        {errorsCliente.email_login && <p>{errorsCliente.email_login.message}</p>}
 
                         <div  className="flex justify-center mt-5">
-                            <button  className="w-1/2 p-1 bg-lime-700 text-white border-none rounded-lg cursor-pointer mb-12" type="submit">Próximo</button>
+                            <button  className="w-1/2 p-1 bg-lime-700 hover:bg-lime-600 text-white border-none rounded-lg cursor-pointer mb-12" type="submit">Próximo</button>
                         </div>
                     </form>
                 ) : (
-                    <form onSubmit={handleSubmitLogin(onSubmitLogin)}>
+                    <form  className="flex flex-col" onSubmit={handleSubmitLogin(onSubmitLogin)}>
 
                         <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60 sm:w-80 md:w-80 lg:w-80 xl:w-80 2xl:w-80" type="password" placeholder="Senha" {...registerLogin("password")} />
                         {errorsLogin.password && <p>{errorsLogin.password.message}</p>}
@@ -125,8 +125,8 @@ const FormCadastro: React.FC<FormCadastroProps> = ({ toggleForm }) => {
                         <input className="w-80 pl-10 py-2 mb-4 border border-gray-300 rounded-full text-base bg-gray-100 focus:border-blue-500 focus:outline-none min-[320px]:w-60 sm:w-80 md:w-80 lg:w-80 xl:w-80 2xl:w-80" type="password" placeholder="Confirme sua senha" {...registerLogin("confirmPassword")} />
                         {errorsLogin.confirmPassword && <p>{errorsLogin.confirmPassword.message}</p>}
 
-                        <div  className="flex justify-center mt-5">
-                        <button type="submit">Cadastrar!</button>
+                        <div  className="flex justify-center mt-14">
+                        <button className="w-44 p-1 bg-lime-700 hover:bg-lime-600 text-white border-none rounded-lg cursor-pointer mb-12" type="submit">Cadastrar!</button>
                         </div>
                     </form>
                 )}

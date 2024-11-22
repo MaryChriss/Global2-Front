@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaStar } from 'react-icons/fa'; // Importando o ícone de estrela
+import { FaStar } from 'react-icons/fa';
 
 const ModalFeedback: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -7,23 +7,29 @@ const ModalFeedback: React.FC = () => {
     const [avaliacao, setAvaliacao] = useState<number | null>(null);
     const [idCliente, setIdCliente] = useState<number | null>(null);
 
-    // Obter id_cliente do localStorage quando o componente for montado
     useEffect(() => {
-        const storedId = localStorage.getItem('id_cliente');
-        if (storedId) {
-        setIdCliente(Number(storedId));
+        const loginData = localStorage.getItem('loginData');
+        if (loginData) {
+            try {
+                const parsedData = JSON.parse(loginData);
+                const id_cliente = parsedData?.cliente?.id_cliente;
+                if (id_cliente) {
+                    setIdCliente(Number(id_cliente));
+                }
+            } catch (error) {
+                console.error('Erro ao parsear loginData:', error);
+            }
         }
     }, []);
 
-    // Função para alternar visibilidade do modal
     const toggleModal = () => setIsVisible(!isVisible);
 
     useEffect(() => {
         const interval = setInterval(() => {
         setIsVisible(true);
-        }, 1200000); // =20m
+        }, 480000); // =8m
 
-        return () => clearInterval(interval); // Limpa o intervalo ao desmontar o componente
+        return () => clearInterval(interval); 
     }, []);
 
     const handleSubmit = () => {
@@ -32,24 +38,27 @@ const ModalFeedback: React.FC = () => {
         return;
         }
 
-        // Enviar feedback para a API
         const feedbackData = {
-        id_cliente: idCliente,
+        cliente:  { id_cliente: idCliente },
         comentario,
         avaliacao,
         };
 
-        fetch('/api/feedback', {
+        fetch('http://localhost:8080/Global2/webapi/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(feedbackData),
         })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log('Feedback enviado:', data);
+        .then((res) => {res.json()
+            isVisible == false
             toggleModal();
         })
+        .then((data) => {
+            console.log('Feedback enviado:', data);
+        })
         .catch((err) => console.error('Erro ao enviar feedback:', err));
+
+
     };
 
     return (
