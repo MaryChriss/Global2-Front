@@ -20,14 +20,6 @@ Por meio de uma interface intuitiva, os usuários podem registrar dados de consu
 - **Java e Python** para a API de backend, responsável pela lógica de negócios e comunicação com o banco de dados.
 - **Chart.js** biblioteca para gerar os gráficos facilitando a visualização de dados
 
-## Como Utilizar o Sistema ⁉️🖥️
-
-1. **Inicie a conversa**: O chatbot começará a interação com você. Clique no ícone do chatbot para iniciar o processo.
-2. **Descreva o problema**: Informe ao chatbot o que está acontecendo com seu veículo de forma clara e detalhada.
-3. **Responda às perguntas**: O chatbot fará uma série de perguntas para entender melhor o problema do seu carro.
-4. **Receba o diagnóstico**: Com base nas suas respostas, o chatbot fornecerá um diagnóstico preliminar sobre o problema do seu veículo.
-5. **Vá até a agência mais próxima**: Após o diagnóstico, você será orientado a comparecer à oficina Porto mais próxima para uma análise detalhada.
-
 ## Páginas do Sistema 📑
 
 ### Página Inicial
